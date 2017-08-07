@@ -100,6 +100,10 @@ describe('flak', function () {
 
         const _array = [listener1];
 
+        _array[0].o = {a:1};
+
+        console.log(_array[0].o);
+
         console.log(listener1 === listener2);
         console.log(listener1 === _array[0]);
         console.log(listener2 === _array[0]);

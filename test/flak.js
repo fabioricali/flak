@@ -246,7 +246,7 @@ describe('flak', function () {
 
         } catch (e) {
             console.log(e.message);
-            be.err.equal(4, event.getListeners().length / 2);
+            be.err.equal(4, event.getListeners().length);
             done();
         }
     });
@@ -287,5 +287,148 @@ describe('flak', function () {
         } catch (e) {
             done(e);
         }
+    });
+
+    it('getMaxListeners', ()=> {
+        const event = new flak({
+            maxListeners: 4
+        });
+
+        be.err.equal(4, event.getMaxListeners());
+    });
+
+    it('clear', ()=> {
+        const event = new flak();
+
+        event.on('myEvent', (param) => {
+            console.log(param, 'hello');
+        });
+        event.on('myEvent', (param) => {
+            console.log(param, 'hello');
+        });
+        event.on('myEvent', (param) => {
+            console.log(param, 'hello');
+        });
+
+        event.clear();
+
+        be.err.equal(0, event.getListenersCount());
+    });
+
+    it('getListenersCount equal 3', ()=> {
+        const event = new flak();
+
+        event.on('myEventPlus', (param) => {
+            console.log(param, 'hello');
+        });
+
+        event.on('myEvent', (param) => {
+            console.log(param, 'hello');
+        });
+        event.on('myEvent', (param) => {
+            console.log(param, 'hello');
+        });
+        event.on('myEvent', (param) => {
+            console.log(param, 'hello');
+        });
+
+        be.err.equal(3, event.getListenersCount('myEvent'));
+        be.err.equal(1, event.getListenersCount('myEventPlus'));
+        be.err.equal(4, event.getListenersCount());
+    });
+
+    it('prependListener', ()=> {
+        const event = new flak();
+
+        event.on('myEventPlus', (param) => {
+            console.log(param, 'hello');
+        });
+
+        event.prependListener('myEvent', (param) => {
+            console.log(param, 'hello');
+        });
+
+        be.err.equal('myEvent', event.getListeners()[0]);
+    });
+
+    it('prependListener fail', (done)=> {
+        const event = new flak();
+
+        try {
+            event.prependListener('myEvent');
+        } catch (e) {
+            console.log(e.message);
+            be.err(done).equal(flak._error[1], e.message);
+        }
+    });
+
+    it('prependOnceListener', ()=> {
+        const event = new flak();
+
+        event.on('myEventPlus', (param) => {
+            console.log(param, 'hello');
+        });
+
+        event.prependOnceListener('myEvent', (param) => {
+            console.log(param, 'hello');
+        });
+
+        be.err.equal('myEvent', event.getListeners()[0]);
+        event.fire('myEvent', 'a1');
+        // not fire
+        event.fire('myEvent', 'a2');
+        console.log(event.getListeners());
+        be.err.not.equal('myEvent', event.getListeners()[0]);
+    });
+
+    it('prependOnceListener fail', (done)=> {
+        const event = new flak();
+
+        try {
+            event.prependOnceListener('myEvent');
+        } catch (e) {
+            console.log(e.message);
+            be.err(done).equal(flak._error[1], e.message);
+        }
+    });
+
+    it('on and once same name', (done)=> {
+        const event = new flak();
+
+        event.once('myEvent', (param) => {
+            console.log(param, 'hello1');
+            done();
+        });
+
+        event.on('myEvent', (param) => {
+            console.log(param, 'hello2');
+
+        });
+
+        event.fire('myEvent', 'a1');
+        event.fire('myEvent', 'a2');
+        //event.fire('myEvent', 'a3');
+
+        console.log(event.getListeners());
+    });
+
+    it('once and on same name, produce multiple calls', (done)=> {
+        const event = new flak();
+
+        event.on('myEvent', (param) => {
+            console.log(param, 'hello1');
+        });
+
+        event.once('myEvent', (param) => {
+            console.log(param, 'hello2');
+            done();
+        });
+
+        event.fire('myEvent', 'a1');
+        event.fire('myEvent', 'a2');
+        event.fire('myEvent', 'a3');
+
+        console.log(event.getListeners());
+        be.err.equal(1, event.getListeners().length)
     });
 });

@@ -41,7 +41,7 @@ helper.findArrayIndex = (itemName, array) => {
     let index = [];
     for(let i in array) {
         if(array.hasOwnProperty(i) && array[i] === itemName)
-            index.push(i);
+            index.push(Number(i));
     }
     return index;
 };

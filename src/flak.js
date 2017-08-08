@@ -7,7 +7,8 @@ const helper = require('./helper');
 const error = [
     'event name is required and must be a string',
     'listener is required and must be a function or an array of function',
-    'value must be a number'
+    'value must be a number',
+    'increase maxListeners per event: '
 ];
 
 /**
@@ -20,11 +21,59 @@ class flak {
      * @param opts {Object} options
      */
     constructor(opts = {}) {
-        this.defOpts = {
+
+        this.defaultClassOpts = {
             maxListeners: 10
         };
-        this.opts = helper.defaults(opts, this.defOpts);
+
+        this.defaultListenerOpts = {
+            maxCalls: 0
+        };
+
+        this.opts = helper.defaults(opts, this.defaultClassOpts);
         this.events = [];
+    }
+
+    /**
+     *
+     * @param eventName {string} event name
+     * @param listener {Function} listener function
+     * @param opts {Object} option object
+     * @private
+     */
+    _createEvent(eventName, listener, opts) {
+
+        if(this.opts.maxListeners) {
+            let maxListeners = this.opts.maxListeners;
+            let listenersCount = helper.findArrayIndex(eventName, this.events).length;
+            console.log(listenersCount);
+            if(listenersCount >= maxListeners)
+                throw new Error(error[3] + maxListeners);
+        }
+
+        listener.opts = helper.defaults(opts, this.defaultListenerOpts);
+
+        listener.info = {
+            calls: 0
+        };
+
+        this.events.push(eventName, listener);
+    }
+
+    /**
+     * Call event
+     * @param eventListener {Function} event listener
+     * @param args args {*} ...arguments
+     * @private
+     */
+    _callEvent(eventListener, args) {
+        if(eventListener.opts.maxCalls && eventListener.opts.maxCalls > 0){
+            if(++eventListener.info.calls > eventListener.opts.maxCalls){
+                this.off(args[0], args[1]);
+                return;
+            }
+        }
+        eventListener.apply(this, args.slice(1));
     }
 
     /**
@@ -40,16 +89,17 @@ class flak {
 
         if (helper.is(listener, 'array')) {
             for(let i in listener) {
-                if (listener.hasOwnProperty(i) && !helper.is(listener[i], 'function'))
-                    throw new Error(error[1]);
+                if(listener.hasOwnProperty(i)) {
+                    if (!helper.is(listener[i], 'function'))
+                        throw new Error(error[1]);
+                    this._createEvent(eventName, listener[i], opts);
+                }
             }
-        } else if (!helper.is(listener, 'function'))
-            throw new Error(error[1]);
-
-        // append options
-        listener.opts = opts;
-
-        this.events.push(eventName, listener);
+        } else {
+            if (!helper.is(listener, 'function'))
+                throw new Error(error[1]);
+            this._createEvent(eventName, listener, opts);
+        }
 
         return this;
     }
@@ -61,8 +111,9 @@ class flak {
      * @returns {flak}
      */
     once(eventName, listener) {
-        if (!helper.is(eventName, 'string'))
-            throw new Error(error[0]);
+        this.on(eventName, listener, {
+            maxCalls: 1
+        });
 
         return this;
     }
@@ -77,6 +128,28 @@ class flak {
         if (!helper.is(eventName, 'string'))
             throw new Error(error[0]);
 
+        let index = helper.findArrayIndex(eventName, this.events);
+
+        if(typeof listener === 'function'){
+            for(let i = 0; i < index.length; i++) {
+                if(this.events[i + 1] === listener)
+                    this.events.splice(i, 2);
+            }
+        } else {
+            for(let i = 0; i < index.length; i++) {
+                this.events.splice(i, 2);
+            }
+        }
+
+        return this;
+    }
+
+    /**
+     * Remove all events
+     * @returns {flak}
+     */
+    clear() {
+        this.events = [];
         return this;
     }
 
@@ -126,13 +199,7 @@ class flak {
             eventListener = this.events[j + 1];
 
             if (this.events[j] === eventName || this.events[j] === 'catchAll') {
-                if(helper.is(eventListener, 'array')) {
-                    for(let e in eventListener)
-                        if(eventListener.hasOwnProperty(e))
-                            eventListener[e].apply(this, _args.slice(1));
-                } else {
-                    eventListener.apply(this, _args.slice(1));
-                }
+                this._callEvent(eventListener, _args);
             }
         }
 

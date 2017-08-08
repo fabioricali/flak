@@ -120,4 +120,172 @@ describe('flak', function () {
         event.fire('myEvent', {a: 123}, 'wowo');
         console.log(event.getListeners());
     });
+
+    it('remove one event listener', ()=>{
+        const event = new flak();
+
+        event.on('myEvent', (param)=>{
+            console.log(param, 'hello');
+        });
+
+        event.fire('myEvent', {a: 123}, 'wowo');
+        console.log(event.getListeners());
+        event.off('myEvent');
+        console.log(event.getListeners());
+    });
+
+    it('remove event listener same name', ()=>{
+        const event = new flak();
+
+        event.on('myEvent', (param)=>{
+            console.log(param, 'hello');
+        });
+
+        event.on('myEvent1', (param)=>{
+            console.log(param, 'world');
+        });
+
+        event.on('myEvent', (param)=>{
+            console.log(param, 'world');
+        });
+
+        event.fire('myEvent', {a: 123}, 'wowo');
+        console.log(event.getListeners());
+        event.off('myEvent');
+        console.log(event.getListeners());
+    });
+
+    it('remove event listener by listener', ()=>{
+        const event = new flak();
+        let listener1;
+        let listener2;
+        let listener3;
+        event.on('myEvent', listener1 = (param)=>{
+            console.log(param, 'hello');
+        });
+
+        event.on('myEvent1', listener2 = (param)=>{
+            console.log(param, 'world');
+        });
+
+        event.on('myEvent', listener3 = (param)=>{
+            console.log(param, 'world');
+        });
+
+        event.fire('myEvent', {a: 123}, 'wowo');
+        console.log(event.getListeners());
+        event.off('myEvent', listener1);
+        console.log(event.getListeners());
+        event.fire('myEvent', {a: 123}, 'wowo');
+    });
+
+    it('once', (done)=> {
+        const event = new flak();
+        event.once('myEvent', (param)=>{
+            console.log(param, 'hello');
+            done();
+        });
+        event.on('myEvent', (param)=>{
+            console.log(param, 'hello');
+        });
+        console.log(event.getListeners());
+        event.fire('myEvent', {a: 123}, 'wowo');
+        event.fire('myEvent', {a: 123}, 'wowo');
+        console.log('total', event.getListeners());
+    });
+
+    it('on max calls setting', (done)=> {
+        const event = new flak();
+        let calls = 0;
+        event.on('myEvent', (param)=>{
+            console.log(param, 'hello');
+            calls++;
+        }, {
+            maxCalls: 4
+        });
+        event.fire('myEvent', {a: 123}, 'wowo');
+        event.fire('myEvent', {a: 123}, 'wowo');
+        event.fire('myEvent', {a: 123}, 'wowo');
+        event.fire('myEvent', {a: 123}, 'wowo');
+        event.fire('myEvent', {a: 123}, 'wowo');
+        event.fire('myEvent', {a: 123}, 'wowo');
+        if(calls === 4)
+            done();
+    });
+
+    it('maxListeners', (done)=> {
+
+        const event = new flak({
+            maxListeners: 4
+        });
+
+        try {
+
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+
+            event.fire('myEvent', {a: 123}, 'wowo');
+
+            done('error');
+
+        } catch (e) {
+            console.log(e.message);
+            be.err.equal(4, event.getListeners().length / 2);
+            done();
+        }
+    });
+
+    it('setMaxListeners', (done)=> {
+
+        const event = new flak({
+            maxListeners: 4
+        });
+
+        event.setMaxListeners(10);
+
+        try {
+
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+            event.on('myEvent', (param) => {
+                console.log(param, 'hello');
+            });
+
+            event.fire('myEvent', {a: 123}, 'wowo');
+
+            done();
+
+        } catch (e) {
+            done(e);
+        }
+    });
 });

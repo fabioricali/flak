@@ -4,6 +4,7 @@
   "description": "JavaScript event emitter for browser and server",
   "main": "index.js",
   "scripts": {
+    "build": "webpack --progress",
     "test": "mocha test"
   },
   "keywords": [

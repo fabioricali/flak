@@ -2,15 +2,15 @@ const helper = require('./helper');
 const error = require('./error');
 
 /**
- * flak :)
+ * Flak :)
  */
-class flak {
+class Flak {
 
     /**
      * Constructor
      * @param opts {Object} options
      * @example
-     * const emitter = new flak();
+     * const emitter = new Flak();
      */
     constructor(opts = {}) {
 
@@ -37,7 +37,7 @@ class flak {
     }
 
     /**
-     *
+     * Create event and add listener
      * @param eventName {string} event name
      * @param listener {Function} listener function
      * @param opts {Object} option object
@@ -94,7 +94,7 @@ class flak {
      * @param eventName {string} event name
      * @param listener {Function} listener function
      * @param opts {Object} option object
-     * @returns {flak}
+     * @returns {Flak}
      * @example
      * emitter.on('myEvent', (param)=>{
      *      console.log(param);
@@ -127,21 +127,11 @@ class flak {
     }
 
     /**
-     * Alias of `on`
-     * @param eventName {string} event name
-     * @param listener {Function} listener function
-     * @param opts {Object} option object
-     * @returns {flak}
-     */
-    addListener(eventName, listener, opts = {}) {
-        return this.on(eventName, listener, opts);
-    }
-
-    /**
      * Adds the listener function to the beginning of the listeners array for the event named eventName
+     * This is a wrapper method of `on` that set to `opts.prepend = true`
      * @param eventName {string} event name
      * @param listener {Function} listener function
-     * @returns {flak}
+     * @returns {Flak}
      */
     prependListener(eventName, listener) {
         return this.on(eventName, listener, {
@@ -151,9 +141,10 @@ class flak {
 
     /**
      * Adds a one time listener function to the beginning of the listeners array for the event named eventName
+     * This is a wrapper method of `on` that set to `opts.maxCalls = 1` and `opts.prepend = true`
      * @param eventName {string} event name
      * @param listener {Function} listener function
-     * @returns {flak}
+     * @returns {Flak}
      */
     prependOnceListener(eventName, listener) {
         return this.on(eventName, listener, {
@@ -163,10 +154,11 @@ class flak {
     }
 
     /**
-     * Adds a one time listener function for the event named eventName
+     * Adds a one time listener function for the event named eventName.
+     * This is a wrapper method of `on` that set to `opts.maxCalls = 1`
      * @param eventName {string} event name
      * @param listener {Function} listener function
-     * @returns {flak}
+     * @returns {Flak}
      * @example
      * emitter.once('myEvent', (param)=>{
      *      console.log(param);
@@ -182,7 +174,7 @@ class flak {
      * Remove event listener
      * @param eventName {string} event name
      * @param listener {Function} listener function
-     * @returns {flak}
+     * @returns {Flak}
      * @example
      * emitter.off('myEvent') // remove all listener with same name
      * emitter.off('myEvent', listener) // remove specific listener
@@ -207,32 +199,14 @@ class flak {
     }
 
     /**
-     * Alias of `off`
-     * @param eventName {string} event name
-     * @param listener {Function} listener function
-     * @returns {flak}
-     */
-    removeListener(eventName, listener) {
-        return this.off(eventName, listener);
-    }
-
-    /**
      * Remove all events
-     * @returns {flak}
+     * @returns {Flak}
      * @example
      * emitter.clear();
      */
     clear() {
         this.events = [];
         return this;
-    }
-
-    /**
-     * Alias of `clear`
-     * @returns {flak}
-     */
-    removeAllListeners() {
-        return this.clear();
     }
 
     /**
@@ -296,7 +270,7 @@ class flak {
     /**
      * Set max number of listeners
      * @param value {int} number max listeners
-     * @returns {flak}
+     * @returns {Flak}
      */
     setMaxListeners(value) {
         if (!helper.is(value, 'number'))
@@ -310,7 +284,7 @@ class flak {
      * Calls each of the listeners registered for the event
      * @param eventName {string} ...arguments
      * @param args {*} ...arguments
-     * @returns {flak}
+     * @returns {Flak}
      * @example
      * emitter.fire('myEvent', param1, param2, ...);
      */
@@ -338,5 +312,5 @@ class flak {
 
 }
 
-module.exports = flak;
+module.exports = Flak;
 module.exports._error = error;

@@ -1,7 +1,7 @@
 const flak = require('../src/flak');
 const be = require('bejs');
 
-describe('flak', function () {
+describe('Flak', function () {
     it('on, single listener', (done) => {
 
         const event = new flak();

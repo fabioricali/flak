@@ -14,10 +14,19 @@ class flak {
      */
     constructor(opts = {}) {
 
+        /**
+         * Class options
+         * @type {{maxListeners: number}}
+         */
         this.defaultClassOpts = {
-            maxListeners: 10
+            maxListeners: 10,
+            eventDelay: 10 // ms
         };
 
+        /**
+         * Event options
+         * @type {{maxCalls: number, prepend: boolean}}
+         */
         this.defaultListenerOpts = {
             maxCalls: 0,
             prepend: false
@@ -287,7 +296,7 @@ class flak {
         let _args = [];
         for (let i = 0; i < args.length; i++) _args.push(args[i]);
 
-        //let eventName = _args[0];
+        //let _this = this;
         let eventListener;
 
         for (let j = 0; j <= this.events.length; j += 2) {

@@ -325,6 +325,11 @@ class flak {
         return this;
     }
 
+    /**
+     * Calls each of the listeners registered for the event, this method is async
+     * @param eventName {string} ...arguments
+     * @param args {*} ...arguments
+     */
     fireAsync(eventName, ...args) {
         setTimeout(() => {
             this.fire(eventName, args);

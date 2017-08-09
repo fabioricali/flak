@@ -12,7 +12,7 @@ describe('flak', function () {
         });
 
         event.fire('myEvent', {a: 123});
-        console.log(event.getListeners());
+        console.log(event.getEvents());
     });
 
     it('on, one event multi listener', (done) => {
@@ -31,7 +31,7 @@ describe('flak', function () {
         event.on('myEvent', [listener1, listener2]);
 
         event.fire('myEvent', {a: 123});
-        console.log(event.getListeners());
+        console.log(event.getEvents());
     });
 
     it('on, more event multi listener', (done) => {
@@ -64,7 +64,7 @@ describe('flak', function () {
         event.fire('myEvent1', {a: 123}, 'hello');
         event.fire('myEvent2', {a: 456}, 'world');
 
-        console.log(event.getListeners());
+        console.log(event.getEvents());
     });
 
     it('on, undefined event name throw error', (done) => {
@@ -118,7 +118,7 @@ describe('flak', function () {
         });
 
         event.fire('myEvent', {a: 123}, 'wowo');
-        console.log(event.getListeners());
+        console.log(event.getEvents());
     });
 
     it('remove one event listener', ()=>{
@@ -129,9 +129,10 @@ describe('flak', function () {
         });
 
         event.fire('myEvent', {a: 123}, 'wowo');
-        console.log(event.getListeners());
+        console.log(event.getEvents());
         event.off('myEvent');
-        console.log(event.getListeners());
+        console.log(event.getEvents());
+        be.err.equal(0, event.getEvents()['myEvent'].length);
     });
 
     it('remove event listener same name', ()=>{
@@ -150,9 +151,10 @@ describe('flak', function () {
         });
 
         event.fire('myEvent', {a: 123}, 'wowo');
-        console.log(event.getListeners());
+        console.log(event.getEvents());
         event.off('myEvent');
-        console.log(event.getListeners());
+        console.log(event.getEvents());
+        be.err.equal(0, event.getEvents()['myEvent'].length);
     });
 
     it('remove event listener by listener', ()=>{
@@ -173,10 +175,11 @@ describe('flak', function () {
         });
 
         event.fire('myEvent', {a: 123}, 'wowo');
-        console.log(event.getListeners());
+        console.log(event.getEvents());
         event.off('myEvent', listener1);
-        console.log(event.getListeners());
+        console.log(event.getEvents());
         event.fire('myEvent', {a: 123}, 'wowo');
+        be.err.equal(1, event.getEvents()['myEvent'].length);
     });
 
     it('once', (done)=> {
@@ -188,10 +191,10 @@ describe('flak', function () {
         event.on('myEvent', (param)=>{
             console.log(param, 'hello');
         });
-        console.log(event.getListeners());
+        console.log(event.getEvents());
         event.fire('myEvent', {a: 123}, 'wowo');
         event.fire('myEvent', {a: 123}, 'wowo');
-        console.log('total', event.getListeners());
+        console.log('total', event.getEvents());
     });
 
     it('on max calls setting', (done)=> {
@@ -246,7 +249,7 @@ describe('flak', function () {
 
         } catch (e) {
             console.log(e.message);
-            be.err.equal(4, event.getListeners().length);
+            be.err.equal(4, event.getListeners('myEvent').length);
             done();
         }
     });
@@ -312,7 +315,7 @@ describe('flak', function () {
 
         event.clear();
 
-        be.err.equal(0, event.getListenersCount());
+        be.err.equal(0, event.getListenersCount('myEvent'));
     });
 
     it('getListenersCount equal 3', ()=> {
@@ -334,7 +337,6 @@ describe('flak', function () {
 
         be.err.equal(3, event.getListenersCount('myEvent'));
         be.err.equal(1, event.getListenersCount('myEventPlus'));
-        be.err.equal(4, event.getListenersCount());
     });
 
     it('prependListener', ()=> {
@@ -348,7 +350,7 @@ describe('flak', function () {
             console.log(param, 'hello');
         });
 
-        be.err.equal('myEvent', event.getListeners()[0]);
+        be.err.truthy(event.getEvents()['myEvent']);
     });
 
     it('prependListener fail', (done)=> {
@@ -373,12 +375,15 @@ describe('flak', function () {
             console.log(param, 'hello');
         });
 
-        be.err.equal('myEvent', event.getListeners()[0]);
+        //be.err.equal('myEvent', event.getListeners()[0]);
+        be.err.truthy(event.getEvents()['myEvent']);
         event.fire('myEvent', 'a1');
         // not fire
         event.fire('myEvent', 'a2');
         console.log(event.getListeners());
-        be.err.not.equal('myEvent', event.getListeners()[0]);
+        //be.err.not.equal('myEvent', event.getEvents()[0]);
+        console.log(event.getEvents());
+        be.err.equal(0, event.getEvents()['myEvent'].length);
     });
 
     it('prependOnceListener fail', (done)=> {
@@ -431,4 +436,5 @@ describe('flak', function () {
         console.log(event.getListeners());
         be.err.equal(1, event.getListeners().length)
     });
+
 });

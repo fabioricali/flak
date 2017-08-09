@@ -33,7 +33,7 @@ class flak {
         };
 
         this.opts = helper.defaults(opts, this.defaultClassOpts);
-        this.events = [];
+        this.events = {};
     }
 
     /**
@@ -45,9 +45,12 @@ class flak {
      */
     _createEvent(eventName, listener, opts) {
 
+        if(!this.events[eventName])
+            this.events[eventName] = [];
+
         if (this.opts.maxListeners) {
             let maxListeners = this.opts.maxListeners;
-            let listenersCount = helper.findArrayIndex(eventName, this.events).length;
+            let listenersCount = this.events[eventName].length;
             if (listenersCount >= maxListeners)
                 throw new Error(error[3] + maxListeners);
         }
@@ -59,9 +62,11 @@ class flak {
         };
 
         if (opts.prepend)
-            this.events.unshift(eventName, listener);
+            this.events[eventName].unshift(listener);
         else
-            this.events.push(eventName, listener);
+            this.events[eventName].push(listener);
+
+        //console.log(this.events);
     }
 
     /**
@@ -186,18 +191,16 @@ class flak {
         if (!helper.is(eventName, 'string'))
             throw new Error(error[0]);
 
-        let index = helper.findArrayIndex(eventName, this.events);
-
-        if (typeof listener === 'function') {
-            for (let i = 0; i <= index.length; i += 2) {
-                if (this.events[i + 1] === listener)
-                    this.events.splice(i, 2);
+        if(this.events[eventName])
+            if (typeof listener === 'function') {
+                for (let i = 0; i < this.events[eventName].length; i ++) {
+                    if (this.events[eventName][i] === listener) {
+                        this.events[eventName].splice(i, 1);
+                    }
+                }
+            } else {
+                this.events[eventName] = [];
             }
-        } else {
-            for (let i = 0; i < index.length; i++) {
-                this.events.splice(i, 2);
-            }
-        }
 
         return this;
     }
@@ -243,24 +246,24 @@ class flak {
      * emitter.getListenersCount() // 3
      */
     getListenersCount(eventName) {
-        if (helper.is(eventName, 'string')) {
-            return helper.findArrayIndex(eventName, this.events).length;
-        } else {
-            return this.events.length / 2;
-        }
+        return this.getListeners(eventName).length
     }
 
     /**
-     * Get listeners list
+     * Get listeners list of event
+     * @param eventName {string} event name
      * @returns {Array}
      */
-    getListeners() {
-        let list = [];
-        for (let i = 0; i < this.events.length; i++) {
-            if (helper.is(this.events[i], 'string'))
-                list.push(this.events[i]);
-        }
-        return list;
+    getListeners(eventName) {
+        return this.events[eventName] ? this.events[eventName] : [];
+    }
+
+    /**
+     * Get listeners list of event
+     * @returns {*|Array}
+     */
+    getEvents() {
+        return this.events;
     }
 
     /**
@@ -296,16 +299,8 @@ class flak {
         let _args = [];
         for (let i = 0; i < args.length; i++) _args.push(args[i]);
 
-        //let _this = this;
-        let eventListener;
-
-        for (let j = 0; j <= this.events.length; j += 2) {
-
-            eventListener = this.events[j + 1];
-
-            if (this.events[j] === eventName || this.events[j] === 'catchAll') {
-                this._callEvent(eventName, eventListener, _args);
-            }
+        for (let j = 0; j < this.events[eventName].length; j++) {
+            this._callEvent(eventName, this.events[eventName][j], _args);
         }
 
         return this;

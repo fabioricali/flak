@@ -132,7 +132,7 @@ describe('flak', function () {
         console.log(event.getEvents());
         event.off('myEvent');
         console.log(event.getEvents());
-        be.err.equal(0, event.getEvents()['myEvent'].length);
+        be.err.falsy(event.getEvents()['myEvent']);
     });
 
     it('remove event listener same name', ()=>{
@@ -154,7 +154,7 @@ describe('flak', function () {
         console.log(event.getEvents());
         event.off('myEvent');
         console.log(event.getEvents());
-        be.err.equal(0, event.getEvents()['myEvent'].length);
+        be.err.falsy(event.getEvents()['myEvent']);
     });
 
     it('remove event listener by listener', ()=>{
@@ -194,6 +194,21 @@ describe('flak', function () {
         console.log(event.getEvents());
         event.fire('myEvent', {a: 123}, 'wowo');
         event.fire('myEvent', {a: 123}, 'wowo');
+        console.log('total', event.getEvents());
+    });
+
+    it('once, fireAsync', (done)=> {
+        const event = new flak();
+        event.once('myEvent', (param)=>{
+            console.log(param, 'hello');
+            done();
+        });
+        event.on('myEvent', (param)=>{
+            console.log(param, 'hello');
+        });
+        console.log(event.getEvents());
+        event.fireAsync('myEvent', {a: 123}, 'wowo');
+        event.fireAsync('myEvent', {a: 123}, 'wowo');
         console.log('total', event.getEvents());
     });
 
@@ -315,7 +330,7 @@ describe('flak', function () {
 
         event.clear();
 
-        be.err.equal(0, event.getListenersCount('myEvent'));
+        be.err.false(event.exists('myEvent'));
     });
 
     it('getListenersCount equal 3', ()=> {
@@ -375,15 +390,40 @@ describe('flak', function () {
             console.log(param, 'hello');
         });
 
-        //be.err.equal('myEvent', event.getListeners()[0]);
         be.err.truthy(event.getEvents()['myEvent']);
         event.fire('myEvent', 'a1');
         // not fire
         event.fire('myEvent', 'a2');
-        console.log(event.getListeners());
         //be.err.not.equal('myEvent', event.getEvents()[0]);
         console.log(event.getEvents());
         be.err.equal(0, event.getEvents()['myEvent'].length);
+    });
+
+    it('prependOnceListener fireAsync', (done)=> {
+        const event = new flak({
+            asyncDelay: 100
+        });
+
+        event.on('myEventPlus', (param) => {
+            console.log(param, 'hello');
+        });
+
+        event.prependOnceListener('myEvent', (param) => {
+            console.log(param, 'hello');
+            //done();
+        });
+
+        be.err.truthy(event.getEvents()['myEvent']);
+        event.fireAsync('myEvent', 'a1');
+        // not fire
+        event.fireAsync('myEvent', 'a2');
+        //be.err.not.equal('myEvent', event.getEvents()[0]);
+        console.log(event.getEvents());
+        setTimeout(()=>{
+            be.err.equal(0, event.getEvents()['myEvent'].length);
+            done();
+        }, event.opts.asyncDelay * 2);
+
     });
 
     it('prependOnceListener fail', (done)=> {
@@ -414,7 +454,7 @@ describe('flak', function () {
         event.fire('myEvent', 'a2');
         //event.fire('myEvent', 'a3');
 
-        console.log(event.getListeners());
+        console.log(event.getListeners('myEvent'));
     });
 
     it('once and on same name, produce multiple calls', (done)=> {
@@ -426,15 +466,43 @@ describe('flak', function () {
 
         event.once('myEvent', (param) => {
             console.log(param, 'hello2');
-            done();
+            setTimeout(()=>{
+                console.log(event.getListeners('myEvent'));
+                be.err.equal(1, event.getListeners('myEvent').length);
+                done();
+            });
         });
 
         event.fire('myEvent', 'a1');
         event.fire('myEvent', 'a2');
         event.fire('myEvent', 'a3');
 
-        console.log(event.getListeners());
-        be.err.equal(1, event.getListeners().length)
+
+    });
+
+    it('once and on same name, produce multiple calls, fireAsync', (done)=> {
+        const event = new flak({
+            asyncDelay: 100
+        });
+
+        event.on('myEvent', (param) => {
+            console.log(param, 'hello1');
+        });
+
+        event.once('myEvent', (param) => {
+            console.log(param, 'hello2');
+        });
+
+        event.fireAsync('myEvent', 'a1');
+        event.fireAsync('myEvent', 'a2');
+        event.fireAsync('myEvent', 'a3');
+
+        setTimeout(() => {
+            console.log(event.getListeners('myEvent'));
+            be.err.equal(1, event.getListeners('myEvent').length);
+            done();
+        }, event.opts.asyncDelay * 2);
+
     });
 
 });

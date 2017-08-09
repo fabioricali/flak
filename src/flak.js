@@ -20,7 +20,7 @@ class flak {
          */
         this.defaultClassOpts = {
             maxListeners: 10,
-            eventDelay: 10 // ms
+            asyncDelay: 10 // ms
         };
 
         /**
@@ -194,12 +194,13 @@ class flak {
         if(this.events[eventName])
             if (typeof listener === 'function') {
                 for (let i = 0; i < this.events[eventName].length; i ++) {
+                    //console.log(this.events[eventName][i] === listener );
                     if (this.events[eventName][i] === listener) {
                         this.events[eventName].splice(i, 1);
                     }
                 }
             } else {
-                this.events[eventName] = [];
+                delete this.events[eventName];
             }
 
         return this;
@@ -255,7 +256,13 @@ class flak {
      * @returns {Array}
      */
     getListeners(eventName) {
-        return this.events[eventName] ? this.events[eventName] : [];
+        if (!helper.is(eventName, 'string'))
+            throw new Error(error[0]);
+
+        if (helper.is(this.events[eventName], 'undefined'))
+            throw new Error(error[5]);
+
+        return this.events[eventName];
     }
 
     /**
@@ -264,6 +271,18 @@ class flak {
      */
     getEvents() {
         return this.events;
+    }
+
+    /**
+     * Check if event exists
+     * @param eventName {string} event name
+     * @returns {boolean}
+     */
+    exists(eventName) {
+        if (!helper.is(eventName, 'string'))
+            throw new Error(error[0]);
+
+        return !helper.is(this.events[eventName], 'undefined');
     }
 
     /**
@@ -304,6 +323,12 @@ class flak {
         }
 
         return this;
+    }
+
+    fireAsync(eventName, ...args) {
+        setTimeout(() => {
+            this.fire(eventName, args);
+        }, this.opts.asyncDelay);
     }
 
 }

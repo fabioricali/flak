@@ -6,12 +6,38 @@ describe('Flak', function () {
 
         const event = new flak();
 
-        event.on('myEvent', (param)=>{
-            console.log(param);
+        event.onCreated((obj) => {
+            console.log('on create', obj);
+        });
+
+        event.on('myEvent', ()=>{
+            //.log();
             done();
         });
 
+        event.fire('myEvent');
+
+        console.log(event.getEvents());
+    });
+    it('on, single listener, fire with params', () => {
+
+        const event = new flak();
+
+        event.on('myEvent', (param)=>{
+            be.err.truthy(param);
+            be.err.equal(123, param.a);
+        });
+
         event.fire('myEvent', {a: 123});
+
+        console.log(event.getEvents());
+    });
+    it('fire an inexistent event', () => {
+
+        const event = new flak();
+
+        event.fire('myEvent_not_exists', {a: 123});
+
         console.log(event.getEvents());
     });
 
@@ -483,6 +509,14 @@ describe('Flak', function () {
     it('once and on same name, produce multiple calls, fireAsync', (done)=> {
         const event = new flak({
             asyncDelay: 100
+        });
+
+        event.onCreated((eventName)=>{
+            console.log('event create', eventName);
+        });
+
+        event.onRemoved((eventName, listener)=>{
+            console.log('event remove', eventName, listener);
         });
 
         event.on('myEvent', (param) => {

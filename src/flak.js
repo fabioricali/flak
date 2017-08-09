@@ -34,6 +34,7 @@ class Flak {
 
         this.opts = helper.defaults(opts, this.defaultClassOpts);
         this.events = {};
+
     }
 
     /**
@@ -42,10 +43,11 @@ class Flak {
      * @param listener {Function} listener function
      * @param opts {Object} option object
      * @private
+     * @ignore
      */
     _createEvent(eventName, listener, opts) {
 
-        if(!this.events[eventName])
+        if (!this.events[eventName])
             this.events[eventName] = [];
 
         if (this.opts.maxListeners) {
@@ -66,7 +68,7 @@ class Flak {
         else
             this.events[eventName].push(listener);
 
-        //console.log(this.events);
+        this._created.call(this, eventName, listener, opts);
     }
 
     /**
@@ -75,6 +77,7 @@ class Flak {
      * @param eventListener {Function} event listener
      * @param args args {*} ...arguments
      * @private
+     * @ignore
      */
     _callEvent(eventName, eventListener, args) {
         if (eventListener.opts.maxCalls) {
@@ -86,7 +89,36 @@ class Flak {
         } else {
             eventListener.apply(this, args);
         }
+    }
 
+    /**
+     * Callback on create
+     * @private
+     * @ignore
+     */
+    _created() {}
+
+    /**
+     * Callback on remove
+     * @private
+     * @ignore
+     */
+    _removed() {}
+
+    /**
+     * This event is triggered when an event is created
+     * @param callback {Function} callback
+     */
+    onCreated(callback) {
+        this._created = callback;
+    }
+
+    /**
+     * This event is triggered when an event is created
+     * @param callback {Function} callback
+     */
+    onRemoved(callback) {
+        this._removed = callback;
     }
 
     /**
@@ -183,16 +215,17 @@ class Flak {
         if (!helper.is(eventName, 'string'))
             throw new Error(error[0]);
 
-        if(this.events[eventName])
+        if (this.events[eventName])
             if (typeof listener === 'function') {
-                for (let i = 0; i < this.events[eventName].length; i ++) {
-                    //console.log(this.events[eventName][i] === listener );
+                for (let i = 0; i < this.events[eventName].length; i++) {
                     if (this.events[eventName][i] === listener) {
                         this.events[eventName].splice(i, 1);
+                        this._removed.call(this, eventName, listener);
                     }
                 }
             } else {
                 delete this.events[eventName];
+                this._removed.call(this, eventName);
             }
 
         return this;
@@ -233,7 +266,7 @@ class Flak {
         if (!helper.is(eventName, 'string'))
             throw new Error(error[0]);
 
-        if (helper.is(this.events[eventName], 'undefined'))
+        if (!this.exists(eventName))
             throw new Error(error[5]);
 
         return this.events[eventName];
@@ -289,12 +322,11 @@ class Flak {
      * emitter.fire('myEvent', param1, param2, ...);
      */
     fire(eventName, ...args) {
-        let _args = [];
-        for (let i = 0; i < args.length; i++) _args.push(args[i]);
 
-        for (let j = 0; j < this.events[eventName].length; j++) {
-            this._callEvent(eventName, this.events[eventName][j], _args);
-        }
+        if(this.exists(eventName))
+            for (let j = 0; j < this.events[eventName].length; j++) {
+                this._callEvent(eventName, this.events[eventName][j], args);
+            }
 
         return this;
     }

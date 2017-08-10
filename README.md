@@ -22,11 +22,38 @@ npm install flak --save
 const Flak = require('flak');
 const emitter = new Flak();
 
-emitter.on('myEvent', (param1, param2)=>{
+// Adds listener for the event
+emitter.on('myEvent1', (param1, param2)=>{
     console.log(param1, param2);
-})
+});
 
-emitter.fire('myEvent', true, {a: 1});
+// Adds a one time listener function for the event 
+emitter.once('myEvent2', (param1, param2)=>{
+    console.log(param1, param2);
+});
+
+// Adds listener for the event that can be call just 4 time
+emitter.on('myEvent3', (param1, param2)=>{
+    console.log(param1, param2);
+}, {
+    maxCalls: 4
+});
+
+// Adds the listener function to the beginning of the listeners array for the event named myEvent1
+emitter.on('myEvent1', (param1, param2)=>{
+    console.log(param1, param2);
+}, {
+    prepend: true
+});
+
+// Fire event
+emitter.fire('myEvent1', true, {a: 1});
+
+// Fire async method
+emitter.fireAsync('myEvent2', true, {a: 1});
+
+// Remove all listeners for myEvent1
+emitter.off('myEvent1');
 ```
 
 ### Browser

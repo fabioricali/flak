@@ -225,7 +225,7 @@ class Flak {
     }
 
     /**
-     * Adds the listener function to the beginning of the listeners array for the event named eventName
+     * Adds the listener function to the beginning of the listeners array for the event named eventName.
      * This is a wrapper method of `on` that set to `opts.prepend = true`
      * @param eventName {string} event name
      * @param listener {(Function|Function[])} listener function
@@ -238,7 +238,7 @@ class Flak {
     }
 
     /**
-     * Adds a one time listener function to the beginning of the listeners array for the event named eventName
+     * Adds a one time listener function to the beginning of the listeners array for the event named eventName.
      * This is a wrapper method of `on` that set to `opts.maxCalls = 1` and `opts.prepend = true`
      * @param eventName {string} event name
      * @param listener {(Function|Function[])} listener function

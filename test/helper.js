@@ -2,6 +2,7 @@ const helper = require('../src/helper');
 const be = require('bejs');
 
 describe('helper', function () {
+
     describe('is', function () {
         it('should be return true', () => {
             let result = helper.is('hello', 'string');
@@ -27,4 +28,5 @@ describe('helper', function () {
             be.err.not.equal(result, {a: 4, b: 5});
         });
     });
+
 });

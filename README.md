@@ -56,6 +56,9 @@ emitter.fireAsync('myEvent2', true, {a: 1});
 emitter.off('myEvent1');
 ```
 
+### API Documentation
+See <a href="api.md">here</a>
+
 ### Browser
 
 #### Local
@@ -72,9 +75,6 @@ emitter.off('myEvent1');
 ```html
 <script src="https://cdn.jsdelivr.net/npm/flak/dist/flak.min.js"></script>
 ```
-
-### API Documentation
-See <a href="api.md">here</a>
 
 ## Changelog
 You can view the changelog <a target="_blank" href="https://github.com/fabioricali/flak/blob/master/CHANGELOG.md">here</a>

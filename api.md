@@ -192,7 +192,7 @@ emitter.off('myEvent') // remove eventemitter.off('myEvent', listener) // remov
 <a name="Flak+prependListener"></a>
 
 ### flak.prependListener(eventName, listener) ⇒ [<code>Flak</code>](#Flak)
-Adds the listener function to the beginning of the listeners array for the event named eventNameThis is a wrapper method of `on` that set to `opts.prepend = true`
+Adds the listener function to the beginning of the listeners array for the event named eventName.This is a wrapper method of `on` that set to `opts.prepend = true`
 
 **Kind**: instance method of [<code>Flak</code>](#Flak)  
 <table>
@@ -214,7 +214,7 @@ Adds the listener function to the beginning of the listeners array for the event
 <a name="Flak+prependOnceListener"></a>
 
 ### flak.prependOnceListener(eventName, listener) ⇒ [<code>Flak</code>](#Flak)
-Adds a one time listener function to the beginning of the listeners array for the event named eventNameThis is a wrapper method of `on` that set to `opts.maxCalls = 1` and `opts.prepend = true`
+Adds a one time listener function to the beginning of the listeners array for the event named eventName.This is a wrapper method of `on` that set to `opts.maxCalls = 1` and `opts.prepend = true`
 
 **Kind**: instance method of [<code>Flak</code>](#Flak)  
 <table>

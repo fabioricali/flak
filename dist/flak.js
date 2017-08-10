@@ -1,4 +1,4 @@
-// [AIV]  Flak Build version: 0.0.0  
+// [AIV]  Flak Build version: 0.1.1  
  var flak =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -342,7 +342,7 @@ var Flak = function () {
         }
 
         /**
-         * Adds the listener function to the beginning of the listeners array for the event named eventName
+         * Adds the listener function to the beginning of the listeners array for the event named eventName.
          * This is a wrapper method of `on` that set to `opts.prepend = true`
          * @param eventName {string} event name
          * @param listener {(Function|Function[])} listener function
@@ -358,7 +358,7 @@ var Flak = function () {
         }
 
         /**
-         * Adds a one time listener function to the beginning of the listeners array for the event named eventName
+         * Adds a one time listener function to the beginning of the listeners array for the event named eventName.
          * This is a wrapper method of `on` that set to `opts.maxCalls = 1` and `opts.prepend = true`
          * @param eventName {string} event name
          * @param listener {(Function|Function[])} listener function
@@ -559,20 +559,6 @@ helper.defaults = function (opts, defaultOpts) {
         }
     }
     return opts;
-};
-
-/**
- *
- * @param itemName {string} item that you want find
- * @param array {Array} array where to look
- * @returns {Array}
- */
-helper.findArrayIndex = function (itemName, array) {
-    var index = [];
-    for (var i in array) {
-        if (array.hasOwnProperty(i) && array[i] === itemName) index.push(Number(i));
-    }
-    return index;
 };
 
 module.exports = helper;

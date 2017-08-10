@@ -1,9 +1,6 @@
 const helper = require('./helper');
 const error = require('./error');
 
-/**
- * Flak :)
- */
 class Flak {
 
     /**
@@ -16,7 +13,7 @@ class Flak {
 
         /**
          * Class options
-         * @type {{maxListeners: number}}
+         * @type {{maxListeners: number, asyncDelay: number}}
          */
         this.defaultClassOpts = {
             maxListeners: 10,

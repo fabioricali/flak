@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --progress",
-    "test": "mocha test"
+    "test": "mocha test",
+    "doc": "jsdoc2md src/flak.js > api.md"
   },
   "keywords": [
     "event",
@@ -28,8 +29,7 @@
     "bejs": "^1.11.0",
     "coveralls": "^2.13.1",
     "istanbul": "^0.4.5",
-    "jsdoc": "^3.5.4",
-    "minami": "^1.2.3",
+    "jsdoc-to-markdown": "^3.0.0",
     "mocha": "^3.5.0",
     "mocha-lcov-reporter": "^1.3.0",
     "unminified-webpack-plugin": "^1.2.0",

@@ -1,6 +1,6 @@
 {
     "name": "flak",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "JavaScript event emitter for browser and server",
     "main": "index.js",
     "scripts": {
@@ -41,7 +41,7 @@
         "webpack-auto-inject-version": "^0.5.14"
     },
     "repository": {
-      "type": "git",
-      "url": "https://github.com/fabioricali/flak"
+        "type": "git",
+        "url": "https://github.com/fabioricali/flak"
     }
 }

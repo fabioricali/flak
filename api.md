@@ -19,8 +19,8 @@
     * [.exists(eventName)](#Flak+exists) ⇒ <code>boolean</code>
     * [.getMaxListeners()](#Flak+getMaxListeners) ⇒ <code>number</code>
     * [.setMaxListeners(value)](#Flak+setMaxListeners) ⇒ [<code>Flak</code>](#Flak)
-    * [.onCreated(callback)](#Flak+onCreated)
-    * [.onRemoved(callback)](#Flak+onRemoved)
+    * [.onCreated(callback)](#Flak+onCreated) ⇒ [<code>Flak</code>](#Flak)
+    * [.onRemoved(callback)](#Flak+onRemoved) ⇒ [<code>Flak</code>](#Flak)
 
 <a name="new_Flak_new"></a>
 
@@ -337,7 +337,7 @@ Set max number of listeners per event
 
 <a name="Flak+onCreated"></a>
 
-### flak.onCreated(callback)
+### flak.onCreated(callback) ⇒ [<code>Flak</code>](#Flak)
 This event is triggered when an event is created
 
 **Kind**: instance method of [<code>Flak</code>](#Flak)  
@@ -360,7 +360,7 @@ emitter.onCreated(obj=>{     console.log(obj) //-> eventName, listener, opts})
 ```
 <a name="Flak+onRemoved"></a>
 
-### flak.onRemoved(callback)
+### flak.onRemoved(callback) ⇒ [<code>Flak</code>](#Flak)
 This event is triggered when an event is removed
 
 **Kind**: instance method of [<code>Flak</code>](#Flak)  

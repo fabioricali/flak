@@ -1,5 +1,7 @@
-const flak = require('../src/flak');
-const be = require('bejs');
+if (typeof process === 'object') {
+    global.flak = require('../src/flak');
+    global.be = require('bejs');
+}
 
 describe('Flak', function () {
     it('on, single listener', (done) => {

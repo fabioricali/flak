@@ -1,0 +1,37 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mocha Tests</title>
+    <link href="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.css" rel="stylesheet" />
+</head>
+<body>
+<div id="mocha"></div>
+
+<script src="https://cdn.rawgit.com/jquery/jquery/2.1.4/dist/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/Automattic/expect.js/0.3.1/index.js"></script>
+<script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.0.2/chai.min.js"></script>
+<script src="https://unpkg.com/bejs/dist/be.min.js"></script>
+
+<script>
+    const assert = chai.assert;
+    mocha.setup('bdd');
+</script>
+
+<script src="../dist/flak.js"></script>
+<script src="flak.js"></script>
+<script>
+    mocha.checkLeaks();
+    mocha.globals(['jQuery']);
+    mocha.run();
+
+    katch();
+    katch.on('error', err => {
+        console.log('katch error');
+        console.log(err.message);
+        console.log(err.stack);
+    });
+</script>
+
+</body>
+</html>

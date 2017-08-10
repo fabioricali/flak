@@ -31,19 +31,4 @@ helper.defaults = (opts, defaultOpts) => {
     return opts;
 };
 
-/**
- *
- * @param itemName {string} item that you want find
- * @param array {Array} array where to look
- * @returns {Array}
- */
-helper.findArrayIndex = (itemName, array) => {
-    let index = [];
-    for(let i in array) {
-        if(array.hasOwnProperty(i) && array[i] === itemName)
-            index.push(Number(i));
-    }
-    return index;
-};
-
 module.exports = helper;

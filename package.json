@@ -4,8 +4,12 @@
   "description": "JavaScript event emitter for browser and server",
   "main": "index.js",
   "scripts": {
+    "version:major": "webpack --env.major && npm run-script && version-to-tag.sh && npm publish",
+    "version:minor": "webpack --env.minor && npm run-script && version-to-tag.sh && npm publish",
+    "version:patch": "webpack --env.patch && npm run-script && version-to-tag.sh && npm publish",
     "build": "webpack --progress",
-    "test": "mocha test",
+    "mocha.test": "mocha test",
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "doc": "jsdoc2md --no-gfm src/flak.js > api.md"
   },
   "keywords": [

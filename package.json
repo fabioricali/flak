@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --progress",
     "test": "mocha test",
-    "doc": "jsdoc2md src/flak.js > api.md"
+    "doc": "jsdoc2md --no-gfm src/flak.js > api.md"
   },
   "keywords": [
     "event",

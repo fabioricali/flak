@@ -5,7 +5,9 @@ class Flak {
 
     /**
      * Constructor
-     * @param opts {Object} options
+     * @param [opts] {Object} options
+     * @param [opts.maxListeners=10] {number} Max number listeners per event
+     * @param [opts.asyncDelay=10] {number} Delay in ms for async method `fireAsync`
      * @example
      * const emitter = new Flak();
      */
@@ -14,6 +16,7 @@ class Flak {
         /**
          * Class options
          * @type {{maxListeners: number, asyncDelay: number}}
+         * @ignore
          */
         this.defaultClassOpts = {
             maxListeners: 10,
@@ -23,6 +26,7 @@ class Flak {
         /**
          * Event options
          * @type {{maxCalls: number, prepend: boolean}}
+         * @ignore
          */
         this.defaultListenerOpts = {
             maxCalls: 0,
@@ -38,7 +42,9 @@ class Flak {
      * Create event and add listener
      * @param eventName {string} event name
      * @param listener {Function} listener function
-     * @param opts {Object} option object
+     * @param [opts] {Object} option object
+     * @param [opts.maxCalls=0] {number} Max calls for event created, disabled if is `0`
+     * @param [opts.prepend=false] {boolean} Adds the listener function to the beginning of the listeners array for the event named `eventName`
      * @private
      * @ignore
      */
@@ -103,26 +109,12 @@ class Flak {
     _removed() {}
 
     /**
-     * This event is triggered when an event is created
-     * @param callback {Function} callback
-     */
-    onCreated(callback) {
-        this._created = callback;
-    }
-
-    /**
-     * This event is triggered when an event is created
-     * @param callback {Function} callback
-     */
-    onRemoved(callback) {
-        this._removed = callback;
-    }
-
-    /**
      * Adds event listener for eventName
      * @param eventName {string} event name
-     * @param listener {Function} listener function
-     * @param opts {Object} option object
+     * @param listener {(Function|Function[])} listener function
+     * @param [opts] {Object} option object
+     * @param [opts.maxCalls=0] {number} Max calls for event created, disabled if is `0`
+     * @param [opts.prepend=false] {boolean} Adds the listener function to the beginning of the listeners array for the event named `eventName`
      * @returns {Flak}
      * @example
      * emitter.on('myEvent', (param)=>{
@@ -156,37 +148,10 @@ class Flak {
     }
 
     /**
-     * Adds the listener function to the beginning of the listeners array for the event named eventName
-     * This is a wrapper method of `on` that set to `opts.prepend = true`
-     * @param eventName {string} event name
-     * @param listener {Function} listener function
-     * @returns {Flak}
-     */
-    prependListener(eventName, listener) {
-        return this.on(eventName, listener, {
-            prepend: true
-        });
-    }
-
-    /**
-     * Adds a one time listener function to the beginning of the listeners array for the event named eventName
-     * This is a wrapper method of `on` that set to `opts.maxCalls = 1` and `opts.prepend = true`
-     * @param eventName {string} event name
-     * @param listener {Function} listener function
-     * @returns {Flak}
-     */
-    prependOnceListener(eventName, listener) {
-        return this.on(eventName, listener, {
-            maxCalls: 1,
-            prepend: true
-        });
-    }
-
-    /**
      * Adds a one time listener function for the event named eventName.
      * This is a wrapper method of `on` that set to `opts.maxCalls = 1`
      * @param eventName {string} event name
-     * @param listener {Function} listener function
+     * @param listener {(Function|Function[])} listener function
      * @returns {Flak}
      * @example
      * emitter.once('myEvent', (param)=>{
@@ -200,12 +165,43 @@ class Flak {
     }
 
     /**
-     * Remove event listener
+     * Calls each of the listeners registered for the event
      * @param eventName {string} event name
-     * @param listener {Function} listener function
+     * @param [args] {*} ...arguments
      * @returns {Flak}
      * @example
-     * emitter.off('myEvent') // remove all listener with same name
+     * emitter.fire('myEvent', param1, param2, ...);
+     */
+    fire(eventName, ...args) {
+
+        if(this.exists(eventName))
+            for (let j = 0; j < this.events[eventName].length; j++) {
+                this._callEvent(eventName, this.events[eventName][j], args);
+            }
+
+        return this;
+    }
+
+    /**
+     * Calls each of the listeners registered for the event, this method is async
+     * @param eventName {string} event name
+     * @param [args] {*} ...arguments
+     * @example
+     * emitter.fireAsync('myEvent', param1, param2, ...);
+     */
+    fireAsync(eventName, ...args) {
+        setTimeout(() => {
+            this.fire(eventName, args);
+        }, this.opts.asyncDelay);
+    }
+
+    /**
+     * Remove event/listener
+     * @param eventName {string} event name
+     * @param [listener] {Function} listener function, if is set remove listener only for this event
+     * @returns {Flak}
+     * @example
+     * emitter.off('myEvent') // remove event
      * emitter.off('myEvent', listener) // remove specific listener
      */
     off(eventName, listener) {
@@ -229,6 +225,33 @@ class Flak {
     }
 
     /**
+     * Adds the listener function to the beginning of the listeners array for the event named eventName
+     * This is a wrapper method of `on` that set to `opts.prepend = true`
+     * @param eventName {string} event name
+     * @param listener {(Function|Function[])} listener function
+     * @returns {Flak}
+     */
+    prependListener(eventName, listener) {
+        return this.on(eventName, listener, {
+            prepend: true
+        });
+    }
+
+    /**
+     * Adds a one time listener function to the beginning of the listeners array for the event named eventName
+     * This is a wrapper method of `on` that set to `opts.maxCalls = 1` and `opts.prepend = true`
+     * @param eventName {string} event name
+     * @param listener {(Function|Function[])} listener function
+     * @returns {Flak}
+     */
+    prependOnceListener(eventName, listener) {
+        return this.on(eventName, listener, {
+            maxCalls: 1,
+            prepend: true
+        });
+    }
+
+    /**
      * Remove all events
      * @returns {Flak}
      * @example
@@ -241,7 +264,7 @@ class Flak {
 
     /**
      * Get listeners count
-     * @param eventName {string} event name is optional
+     * @param eventName {string} event name
      * @returns {number}
      * @example
      * emitter.on('event1', listener1);
@@ -270,8 +293,8 @@ class Flak {
     }
 
     /**
-     * Get listeners list of event
-     * @returns {*|Array}
+     * Get events list
+     * @returns {Array}
      */
     getEvents() {
         return this.events;
@@ -290,7 +313,7 @@ class Flak {
     }
 
     /**
-     * Get max number of listeners
+     * Get max number of listeners per event
      * @returns {number}
      */
     getMaxListeners() {
@@ -298,7 +321,7 @@ class Flak {
     }
 
     /**
-     * Set max number of listeners
+     * Set max number of listeners per event
      * @param value {int} number max listeners
      * @returns {Flak}
      */
@@ -311,34 +334,34 @@ class Flak {
     }
 
     /**
-     * Calls each of the listeners registered for the event
-     * @param eventName {string} ...arguments
-     * @param args {*} ...arguments
-     * @returns {Flak}
+     * This event is triggered when an event is created
+     * @param callback {Function} callback function
      * @example
-     * emitter.fire('myEvent', param1, param2, ...);
+     * emitter.onCreated(obj=>{
+     *      console.log(obj) //-> eventName, listener, opts
+     * })
+     *
+     * emitter.on('myEvent', (param)=>{
+     *      console.log(param)
+     * })
      */
-    fire(eventName, ...args) {
-
-        if(this.exists(eventName))
-            for (let j = 0; j < this.events[eventName].length; j++) {
-                this._callEvent(eventName, this.events[eventName][j], args);
-            }
-
-        return this;
+    onCreated(callback) {
+        this._created = callback;
     }
 
     /**
-     * Calls each of the listeners registered for the event, this method is async
-     * @param eventName {string} ...arguments
-     * @param args {*} ...arguments
+     * This event is triggered when an event is removed
+     * @param callback {Function} callback function
+     * @example
+     * emitter.onRemoved(obj=>{
+     *      console.log(obj) //-> eventName, (listener)
+     * })
+     *
+     * emitter.off('myEvent')
      */
-    fireAsync(eventName, ...args) {
-        setTimeout(() => {
-            this.fire(eventName, args);
-        }, this.opts.asyncDelay);
+    onRemoved(callback) {
+        this._removed = callback;
     }
-
 }
 
 module.exports = Flak;

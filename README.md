@@ -1,6 +1,6 @@
 <div align="center">
 <br/><br/>
-<img width="320" src="https://raw.githubusercontent.com/fabioricali/flak/develop/extra/logo.png" title="flak"/>
+<img width="320" src="https://raw.githubusercontent.com/fabioricali/flak/master/extra/logo.png" title="flak"/>
 <br/><br/>
 JavaScript event emitter for browser and server.
 <br/><br/>

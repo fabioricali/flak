@@ -57,7 +57,7 @@ emitter.off('myEvent1');
 ```
 
 ### API Documentation
-See <a href="api.md">here</a>
+See <a href="https://github.com/fabioricali/flak/blob/master/api.md">here</a>
 
 ### Browser
 

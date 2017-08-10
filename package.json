@@ -39,5 +39,9 @@
         "unminified-webpack-plugin": "^1.2.0",
         "webpack": "^3.4.1",
         "webpack-auto-inject-version": "^0.5.14"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/fabioricali/flak"
     }
 }

@@ -1,14 +1,14 @@
 const helper = {};
 
 /**
- * Get prototype class
+ * Get object type
  * @param object {*}
- * @param className {string}
+ * @param type {string}
  * @returns {boolean}
  */
-helper.is = (object, className) => {
+helper.is = (object, type) => {
     let objectToString = Object.prototype.toString.call(object);
-    return objectToString.toLowerCase() === '[object ' + className + ']'.toLowerCase();
+    return objectToString.toLowerCase() === '[object ' + type + ']'.toLowerCase();
 };
 
 /**

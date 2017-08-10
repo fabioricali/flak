@@ -267,11 +267,11 @@ class Flak {
      * @param eventName {string} event name
      * @returns {number}
      * @example
-     * emitter.on('event1', listener1);
-     * emitter.on('event2', listener2);
-     * emitter.on('event3', listener3);
+     * emitter.on('event', listener1);
+     * emitter.on('event', listener2);
+     * emitter.on('event1', listener3);
      *
-     * emitter.getListenersCount() // 3
+     * emitter.getListenersCount('event') // 2
      */
     getListenersCount(eventName) {
         return this.getListeners(eventName).length

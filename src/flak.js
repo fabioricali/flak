@@ -336,6 +336,7 @@ class Flak {
     /**
      * This event is triggered when an event is created
      * @param callback {Function} callback function
+     * @returns {Flak}
      * @example
      * emitter.onCreated(obj=>{
      *      console.log(obj) //-> eventName, listener, opts
@@ -347,11 +348,13 @@ class Flak {
      */
     onCreated(callback) {
         this._created = callback;
+        return this;
     }
 
     /**
      * This event is triggered when an event is removed
      * @param callback {Function} callback function
+     * @returns {Flak}
      * @example
      * emitter.onRemoved(obj=>{
      *      console.log(obj) //-> eventName, (listener)
@@ -361,6 +364,7 @@ class Flak {
      */
     onRemoved(callback) {
         this._removed = callback;
+        return this;
     }
 }
 

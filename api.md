@@ -264,7 +264,7 @@ Get listeners count
 
 **Example**  
 ```js
-emitter.on('event1', listener1);emitter.on('event2', listener2);emitter.on('event3', listener3);emitter.getListenersCount() // 3
+emitter.on('event', listener1);emitter.on('event', listener2);emitter.on('event1', listener3);emitter.getListenersCount('event') // 2
 ```
 <a name="Flak+getListeners"></a>
 

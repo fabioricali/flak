@@ -541,4 +541,26 @@ describe('Flak', function () {
 
     });
 
+    it('catch all', ()=>{
+        const event = new flak();
+
+        event.onCatchAll((args) => {
+            console.log('catch all', args);
+        });
+
+        event.on('myEvent1', (param) => {
+            console.log(param, 'hello1');
+        });
+        event.on('myEvent2', (param) => {
+            console.log(param, 'hello2');
+        });
+        event.on('myEvent3', (param) => {
+            console.log(param, 'hello3');
+        });
+
+        event.fire('myEvent1', 'world1', 'mondo1');
+        event.fire('myEvent2', 'world2', 'mondo2');
+        event.fire('myEvent3', 'world3', 'mondo3');
+
+    });
 });

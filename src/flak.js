@@ -89,8 +89,10 @@ class Flak {
                 return;
             }
             eventListener.apply(this, args);
+            this._catchAll.call(this, args);
         } else {
             eventListener.apply(this, args);
+            this._catchAll.call(this, args);
         }
     }
 
@@ -109,6 +111,13 @@ class Flak {
     _removed() {}
 
     /**
+     * Callback catch all
+     * @private
+     * @ignore
+     */
+    _catchAll() {}
+
+    /**
      * Adds event listener for eventName
      * @param eventName {string} event name
      * @param listener {(Function|Function[])} listener function
@@ -119,7 +128,7 @@ class Flak {
      * @example
      * emitter.on('myEvent', (param)=>{
      *      console.log(param);
-     * })
+     * });
      */
     on(eventName, listener, opts = {}) {
         if (!helper.is(eventName, 'string'))
@@ -156,7 +165,7 @@ class Flak {
      * @example
      * emitter.once('myEvent', (param)=>{
      *      console.log(param);
-     * })
+     * });
      */
     once(eventName, listener) {
         return this.on(eventName, listener, {
@@ -201,8 +210,8 @@ class Flak {
      * @param [listener] {Function} listener function, if is set remove listener only for this event
      * @returns {Flak}
      * @example
-     * emitter.off('myEvent') // remove event
-     * emitter.off('myEvent', listener) // remove specific listener
+     * emitter.off('myEvent'); // remove event
+     * emitter.off('myEvent', listener); // remove specific listener
      */
     off(eventName, listener) {
         if (!helper.is(eventName, 'string'))
@@ -271,7 +280,7 @@ class Flak {
      * emitter.on('event', listener2);
      * emitter.on('event1', listener3);
      *
-     * emitter.getListenersCount('event') // 2
+     * emitter.getListenersCount('event'); // 2
      */
     getListenersCount(eventName) {
         return this.getListeners(eventName).length
@@ -339,12 +348,12 @@ class Flak {
      * @returns {Flak}
      * @example
      * emitter.onCreated(obj=>{
-     *      console.log(obj) //-> eventName, listener, opts
-     * })
+     *      console.log(obj); //-> eventName, listener, opts
+     * });
      *
      * emitter.on('myEvent', (param)=>{
-     *      console.log(param)
-     * })
+     *      console.log(param);
+     * });
      */
     onCreated(callback) {
         this._created = callback;
@@ -357,13 +366,33 @@ class Flak {
      * @returns {Flak}
      * @example
      * emitter.onRemoved(obj=>{
-     *      console.log(obj) //-> eventName, (listener)
-     * })
+     *      console.log(obj); //-> eventName, (listener)
+     * });
      *
-     * emitter.off('myEvent')
+     * emitter.off('myEvent');
      */
     onRemoved(callback) {
         this._removed = callback;
+        return this;
+    }
+
+    /**
+     * This event is triggered when an event is removed
+     * @param callback {Function} callback function
+     * @returns {Flak}
+     * @example
+     * emitter.onCatchAll(...args=>{
+     *      console.log(args);
+     * });
+     *
+     * emitter.on('myEvent', param=>{
+     *      console.log(param);
+     * });
+     *
+     * emitter.fire('myEvent');
+     */
+    onCatchAll(callback) {
+        this._catchAll = callback;
         return this;
     }
 }

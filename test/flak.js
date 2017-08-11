@@ -607,7 +607,7 @@ describe('Flak', function () {
         const event = new flak();
         try {
             event.on('event', [(param) => {}]);
-            event.off('', [(param) => {}]);
+            event.off(12, [(param) => {}]);
         } catch (e) {
             be.err.equal(flak._error[0], e.message);
         }

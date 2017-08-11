@@ -521,17 +521,18 @@ describe('Flak', function () {
             console.log('event remove', eventName, listener);
         });
 
-        event.on('myEvent', (param) => {
-            console.log(param, 'hello1');
+        event.on('myEvent', (param1, param2) => {
+            console.log(param1, param2, 'hello1');
         });
 
         event.once('myEvent', (param) => {
             console.log(param, 'hello2');
         });
 
-        event.fireAsync('myEvent', 'a1');
+        event.fireAsync('myEvent', 'a1', 'b1');
         event.fireAsync('myEvent', 'a2');
         event.fireAsync('myEvent', 'a3');
+        event.fireAsync('myEvent');
 
         setTimeout(() => {
             console.log(event.getListeners('myEvent'));
@@ -541,21 +542,28 @@ describe('Flak', function () {
 
     });
 
-    it('catch all', ()=>{
+    it('catch all', (done)=>{
         const event = new flak();
+
+        let i=0;
 
         event.onCatchAll((args) => {
             console.log('catch all', args);
+            if(i === 3)
+                done();
         });
 
         event.on('myEvent1', (param) => {
             console.log(param, 'hello1');
+            i++;
         });
         event.on('myEvent2', (param) => {
             console.log(param, 'hello2');
+            i++;
         });
         event.on('myEvent3', (param) => {
             console.log(param, 'hello3');
+            i++;
         });
 
         event.fire('myEvent1', 'world1', 'mondo1');

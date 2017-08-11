@@ -194,13 +194,14 @@ class Flak {
     /**
      * Calls each of the listeners registered for the event, this method is async
      * @param eventName {string} event name
-     * @param [args] {*} ...arguments
+     * @param args {*} ...arguments
      * @example
      * emitter.fireAsync('myEvent', param1, param2, ...);
      */
     fireAsync(eventName, ...args) {
+        args.unshift(eventName);
         setTimeout(() => {
-            this.fire(eventName, args);
+            this.fire.apply(this, args);
         }, this.opts.asyncDelay);
     }
 

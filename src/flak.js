@@ -344,6 +344,27 @@ class Flak {
     }
 
     /**
+     * Triggered when an event is fired
+     * @param callback {Function} callback function
+     * @returns {Flak}
+     * @example
+     * emitter.onCatchAll(args=>{
+     *      // args is an array of params
+     *      console.log(args);
+     * });
+     *
+     * emitter.on('myEvent', param=>{
+     *      console.log(param);
+     * });
+     *
+     * emitter.fire('myEvent');
+     */
+    onCatchAll(callback) {
+        this._catchAll = callback;
+        return this;
+    }
+
+    /**
      * Triggered when an event is created
      * @param callback {Function} callback function
      * @returns {Flak}
@@ -374,27 +395,6 @@ class Flak {
      */
     onRemoved(callback) {
         this._removed = callback;
-        return this;
-    }
-
-    /**
-     * Triggered when an event is fired
-     * @param callback {Function} callback function
-     * @returns {Flak}
-     * @example
-     * emitter.onCatchAll(args=>{
-     *      // args is an array of params
-     *      console.log(args);
-     * });
-     *
-     * emitter.on('myEvent', param=>{
-     *      console.log(param);
-     * });
-     *
-     * emitter.fire('myEvent');
-     */
-    onCatchAll(callback) {
-        this._catchAll = callback;
         return this;
     }
 }

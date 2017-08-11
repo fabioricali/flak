@@ -5,7 +5,7 @@
 JavaScript event emitter for browser and server.
 <br/><br/>
 <a href="https://travis-ci.org/fabioricali/flak" target="_blank"><img src="https://travis-ci.org/fabioricali/flak.svg?branch=master" title="Build Status"/></a>
-<a href="https://coveralls.io/github/fabioricali/flak?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/fabioricali/flak/badge.svg?branch=master" title="Coverage Status"/></a>
+<a href="https://coveralls.io/github/fabioricali/flak?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/fabioricali/flak/badge.svg?branch=master&1" title="Coverage Status"/></a>
 <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" title="License: MIT"/></a>
 <img src="https://img.shields.io/badge/team-terrons-orange.svg" title="Team Terrons"/>
 </div>

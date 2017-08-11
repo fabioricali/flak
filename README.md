@@ -1,6 +1,6 @@
 <div align="center">
 <br/><br/>
-<img width="320" src="https://raw.githubusercontent.com/fabioricali/flak/master/extra/logo.png" title="flak"/>
+<img width="250" src="https://raw.githubusercontent.com/fabioricali/flak/master/extra/logo.png" title="flak"/>
 <br/><br/>
 JavaScript event emitter for browser and server.
 <br/><br/>
@@ -44,6 +44,11 @@ emitter.on('myEvent1', (param1, param2)=>{
     console.log(param1, param2);
 }, {
     prepend: true
+});
+
+// Catch all events
+emitter.onCatchAll(params=>{
+    console.log(params);
 });
 
 // Fire event

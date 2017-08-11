@@ -304,7 +304,7 @@ class Flak {
 
     /**
      * Get events list
-     * @returns {Array}
+     * @returns {Object}
      */
     getEvents() {
         return this.events;
@@ -344,7 +344,7 @@ class Flak {
     }
 
     /**
-     * This event is triggered when an event is created
+     * Triggered when an event is created
      * @param callback {Function} callback function
      * @returns {Flak}
      * @example
@@ -362,7 +362,7 @@ class Flak {
     }
 
     /**
-     * This event is triggered when an event is removed
+     * Triggered when an event is removed
      * @param callback {Function} callback function
      * @returns {Flak}
      * @example
@@ -378,11 +378,12 @@ class Flak {
     }
 
     /**
-     * This event is triggered when an event is removed
+     * Triggered when an event is fired
      * @param callback {Function} callback function
      * @returns {Flak}
      * @example
-     * emitter.onCatchAll(...args=>{
+     * emitter.onCatchAll(args=>{
+     *      // args is an array of params
      *      console.log(args);
      * });
      *

@@ -1,4 +1,4 @@
-// [AIV]  Flak Build version: 0.1.3  
+// [AIV]  Flak Build version: 0.2.0  
  var flak =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -180,8 +180,10 @@ var Flak = function () {
                     return;
                 }
                 eventListener.apply(this, args);
+                this._catchAll.call(this, args);
             } else {
                 eventListener.apply(this, args);
+                this._catchAll.call(this, args);
             }
         }
 
@@ -206,6 +208,16 @@ var Flak = function () {
         value: function _removed() {}
 
         /**
+         * Callback catch all
+         * @private
+         * @ignore
+         */
+
+    }, {
+        key: '_catchAll',
+        value: function _catchAll() {}
+
+        /**
          * Adds event listener for eventName
          * @param eventName {string} event name
          * @param listener {(Function|Function[])} listener function
@@ -216,7 +228,7 @@ var Flak = function () {
          * @example
          * emitter.on('myEvent', (param)=>{
          *      console.log(param);
-         * })
+         * });
          */
 
     }, {
@@ -254,7 +266,7 @@ var Flak = function () {
          * @example
          * emitter.once('myEvent', (param)=>{
          *      console.log(param);
-         * })
+         * });
          */
 
     }, {
@@ -292,7 +304,7 @@ var Flak = function () {
         /**
          * Calls each of the listeners registered for the event, this method is async
          * @param eventName {string} event name
-         * @param [args] {*} ...arguments
+         * @param args {*} ...arguments
          * @example
          * emitter.fireAsync('myEvent', param1, param2, ...);
          */
@@ -306,8 +318,9 @@ var Flak = function () {
                 args[_key2 - 1] = arguments[_key2];
             }
 
+            args.unshift(eventName);
             setTimeout(function () {
-                _this.fire(eventName, args);
+                _this.fire.apply(_this, args);
             }, this.opts.asyncDelay);
         }
 
@@ -317,8 +330,8 @@ var Flak = function () {
          * @param [listener] {Function} listener function, if is set remove listener only for this event
          * @returns {Flak}
          * @example
-         * emitter.off('myEvent') // remove event
-         * emitter.off('myEvent', listener) // remove specific listener
+         * emitter.off('myEvent'); // remove event
+         * emitter.off('myEvent', listener); // remove specific listener
          */
 
     }, {
@@ -397,7 +410,7 @@ var Flak = function () {
          * emitter.on('event', listener2);
          * emitter.on('event1', listener3);
          *
-         * emitter.getListenersCount('event') // 2
+         * emitter.getListenersCount('event'); // 2
          */
 
     }, {
@@ -424,7 +437,7 @@ var Flak = function () {
 
         /**
          * Get events list
-         * @returns {Array}
+         * @returns {Object}
          */
 
     }, {
@@ -474,17 +487,41 @@ var Flak = function () {
         }
 
         /**
-         * This event is triggered when an event is created
+         * Triggered when an event is fired
+         * @param callback {Function} callback function
+         * @returns {Flak}
+         * @example
+         * emitter.onCatchAll(args=>{
+         *      // args is an array of params
+         *      console.log(args);
+         * });
+         *
+         * emitter.on('myEvent', param=>{
+         *      console.log(param);
+         * });
+         *
+         * emitter.fire('myEvent');
+         */
+
+    }, {
+        key: 'onCatchAll',
+        value: function onCatchAll(callback) {
+            this._catchAll = callback;
+            return this;
+        }
+
+        /**
+         * Triggered when an event is created
          * @param callback {Function} callback function
          * @returns {Flak}
          * @example
          * emitter.onCreated(obj=>{
-         *      console.log(obj) //-> eventName, listener, opts
-         * })
+         *      console.log(obj); //-> eventName, listener, opts
+         * });
          *
          * emitter.on('myEvent', (param)=>{
-         *      console.log(param)
-         * })
+         *      console.log(param);
+         * });
          */
 
     }, {
@@ -495,15 +532,15 @@ var Flak = function () {
         }
 
         /**
-         * This event is triggered when an event is removed
+         * Triggered when an event is removed
          * @param callback {Function} callback function
          * @returns {Flak}
          * @example
          * emitter.onRemoved(obj=>{
-         *      console.log(obj) //-> eventName, (listener)
-         * })
+         *      console.log(obj); //-> eventName, (listener)
+         * });
          *
-         * emitter.off('myEvent')
+         * emitter.off('myEvent');
          */
 
     }, {
@@ -532,14 +569,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var helper = {};
 
 /**
- * Get prototype class
+ * Get object type
  * @param object {*}
- * @param className {string}
+ * @param type {string}
  * @returns {boolean}
  */
-helper.is = function (object, className) {
+helper.is = function (object, type) {
     var objectToString = Object.prototype.toString.call(object);
-    return objectToString.toLowerCase() === '[object ' + className + ']'.toLowerCase();
+    return objectToString.toLowerCase() === '[object ' + type + ']'.toLowerCase();
 };
 
 /**

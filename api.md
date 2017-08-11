@@ -8,17 +8,18 @@
     * [.on(eventName, listener, [opts])](#Flak+on) ⇒ [<code>Flak</code>](#Flak)
     * [.once(eventName, listener)](#Flak+once) ⇒ [<code>Flak</code>](#Flak)
     * [.fire(eventName, [...args])](#Flak+fire) ⇒ [<code>Flak</code>](#Flak)
-    * [.fireAsync(eventName, [...args])](#Flak+fireAsync)
+    * [.fireAsync(eventName, ...args)](#Flak+fireAsync)
     * [.off(eventName, [listener])](#Flak+off) ⇒ [<code>Flak</code>](#Flak)
     * [.prependListener(eventName, listener)](#Flak+prependListener) ⇒ [<code>Flak</code>](#Flak)
     * [.prependOnceListener(eventName, listener)](#Flak+prependOnceListener) ⇒ [<code>Flak</code>](#Flak)
     * [.clear()](#Flak+clear) ⇒ [<code>Flak</code>](#Flak)
     * [.getListenersCount(eventName)](#Flak+getListenersCount) ⇒ <code>number</code>
     * [.getListeners(eventName)](#Flak+getListeners) ⇒ <code>Array</code>
-    * [.getEvents()](#Flak+getEvents) ⇒ <code>Array</code>
+    * [.getEvents()](#Flak+getEvents) ⇒ <code>Object</code>
     * [.exists(eventName)](#Flak+exists) ⇒ <code>boolean</code>
     * [.getMaxListeners()](#Flak+getMaxListeners) ⇒ <code>number</code>
     * [.setMaxListeners(value)](#Flak+setMaxListeners) ⇒ [<code>Flak</code>](#Flak)
+    * [.onCatchAll(callback)](#Flak+onCatchAll) ⇒ [<code>Flak</code>](#Flak)
     * [.onCreated(callback)](#Flak+onCreated) ⇒ [<code>Flak</code>](#Flak)
     * [.onRemoved(callback)](#Flak+onRemoved) ⇒ [<code>Flak</code>](#Flak)
 
@@ -83,7 +84,7 @@ Adds event listener for eventName
 
 **Example**  
 ```js
-emitter.on('myEvent', (param)=>{     console.log(param);})
+emitter.on('myEvent', (param)=>{     console.log(param);});
 ```
 <a name="Flak+once"></a>
 
@@ -109,7 +110,7 @@ Adds a one time listener function for the event named eventName.This is a wrapp
 
 **Example**  
 ```js
-emitter.once('myEvent', (param)=>{     console.log(param);})
+emitter.once('myEvent', (param)=>{     console.log(param);});
 ```
 <a name="Flak+fire"></a>
 
@@ -139,7 +140,7 @@ emitter.fire('myEvent', param1, param2, ...);
 ```
 <a name="Flak+fireAsync"></a>
 
-### flak.fireAsync(eventName, [...args])
+### flak.fireAsync(eventName, ...args)
 Calls each of the listeners registered for the event, this method is async
 
 **Kind**: instance method of [<code>Flak</code>](#Flak)  
@@ -154,7 +155,7 @@ Calls each of the listeners registered for the event, this method is async
     <td>eventName</td><td><code>string</code></td><td><p>event name</p>
 </td>
     </tr><tr>
-    <td>[...args]</td><td><code>*</code></td><td><p>...arguments</p>
+    <td>...args</td><td><code>*</code></td><td><p>...arguments</p>
 </td>
     </tr>  </tbody>
 </table>
@@ -187,7 +188,7 @@ Remove event/listener
 
 **Example**  
 ```js
-emitter.off('myEvent') // remove eventemitter.off('myEvent', listener) // remove specific listener
+emitter.off('myEvent'); // remove eventemitter.off('myEvent', listener); // remove specific listener
 ```
 <a name="Flak+prependListener"></a>
 
@@ -264,7 +265,7 @@ Get listeners count
 
 **Example**  
 ```js
-emitter.on('event', listener1);emitter.on('event', listener2);emitter.on('event1', listener3);emitter.getListenersCount('event') // 2
+emitter.on('event', listener1);emitter.on('event', listener2);emitter.on('event1', listener3);emitter.getListenersCount('event'); // 2
 ```
 <a name="Flak+getListeners"></a>
 
@@ -287,7 +288,7 @@ Get listeners list of event
 
 <a name="Flak+getEvents"></a>
 
-### flak.getEvents() ⇒ <code>Array</code>
+### flak.getEvents() ⇒ <code>Object</code>
 Get events list
 
 **Kind**: instance method of [<code>Flak</code>](#Flak)  
@@ -335,10 +336,10 @@ Set max number of listeners per event
     </tr>  </tbody>
 </table>
 
-<a name="Flak+onCreated"></a>
+<a name="Flak+onCatchAll"></a>
 
-### flak.onCreated(callback) ⇒ [<code>Flak</code>](#Flak)
-This event is triggered when an event is created
+### flak.onCatchAll(callback) ⇒ [<code>Flak</code>](#Flak)
+Triggered when an event is fired
 
 **Kind**: instance method of [<code>Flak</code>](#Flak)  
 <table>
@@ -356,12 +357,35 @@ This event is triggered when an event is created
 
 **Example**  
 ```js
-emitter.onCreated(obj=>{     console.log(obj) //-> eventName, listener, opts})emitter.on('myEvent', (param)=>{     console.log(param)})
+emitter.onCatchAll(args=>{     // args is an array of params     console.log(args);});emitter.on('myEvent', param=>{     console.log(param);});emitter.fire('myEvent');
+```
+<a name="Flak+onCreated"></a>
+
+### flak.onCreated(callback) ⇒ [<code>Flak</code>](#Flak)
+Triggered when an event is created
+
+**Kind**: instance method of [<code>Flak</code>](#Flak)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>callback</td><td><code>function</code></td><td><p>callback function</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+**Example**  
+```js
+emitter.onCreated(obj=>{     console.log(obj); //-> eventName, listener, opts});emitter.on('myEvent', (param)=>{     console.log(param);});
 ```
 <a name="Flak+onRemoved"></a>
 
 ### flak.onRemoved(callback) ⇒ [<code>Flak</code>](#Flak)
-This event is triggered when an event is removed
+Triggered when an event is removed
 
 **Kind**: instance method of [<code>Flak</code>](#Flak)  
 <table>
@@ -379,5 +403,5 @@ This event is triggered when an event is removed
 
 **Example**  
 ```js
-emitter.onRemoved(obj=>{     console.log(obj) //-> eventName, (listener)})emitter.off('myEvent')
+emitter.onRemoved(obj=>{     console.log(obj); //-> eventName, (listener)});emitter.off('myEvent');
 ```

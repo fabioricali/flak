@@ -335,6 +335,17 @@ describe('Flak', function () {
         }
     });
 
+    it('setMaxListeners, wrong value', ()=> {
+
+        const event = new flak();
+
+        try {
+            event.setMaxListeners('56');
+        } catch (e) {
+            be.err.equal(flak._error[2], e.message);
+        }
+    });
+
     it('getMaxListeners', ()=> {
         const event = new flak({
             maxListeners: 4
@@ -570,5 +581,65 @@ describe('Flak', function () {
         event.fire('myEvent2', 'world2', 'mondo2');
         event.fire('myEvent3', 'world3', 'mondo3');
 
+    });
+
+    it('on, wrong event name', ()=>{
+        const event = new flak();
+        try {
+            event.on('', (param) => {
+            });
+        } catch (e) {
+            be.err.equal(flak._error[4], e.message);
+        }
+    });
+
+    it('on, wrong listener item in array', ()=>{
+        const event = new flak();
+        try {
+            event.on('event', [(param) => {
+            }, false]);
+        } catch (e) {
+            be.err.equal(flak._error[1], e.message);
+        }
+    });
+
+    it('off, wrong event name', ()=>{
+        const event = new flak();
+        try {
+            event.on('event', [(param) => {}]);
+            event.off('', [(param) => {}]);
+        } catch (e) {
+            be.err.equal(flak._error[0], e.message);
+        }
+    });
+
+    it('exists, wrong event name', ()=>{
+        const event = new flak();
+        try {
+            event.on('event', [(param) => {}]);
+            event.exists();
+        } catch (e) {
+            be.err.equal(flak._error[0], e.message);
+        }
+    });
+
+    it('getListeners, wrong event name', ()=>{
+        const event = new flak();
+        try {
+            event.on('event', [(param) => {}]);
+            event.getListeners();
+        } catch (e) {
+            be.err.equal(flak._error[0], e.message);
+        }
+    });
+
+    it('getListeners, event not found', ()=>{
+        const event = new flak();
+        try {
+            event.on('event', [(param) => {}]);
+            event.getListeners('hi');
+        } catch (e) {
+            be.err.equal(flak._error[5], e.message);
+        }
     });
 });

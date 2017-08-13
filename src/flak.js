@@ -2,7 +2,7 @@ const helper = require('./helper');
 const error = require('./error');
 
 class Flak {
-
+    //TODO add support to cross-domain through postMessage, see: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
     /**
      * Constructor
      * @param [opts] {Object} options

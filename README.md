@@ -68,12 +68,12 @@ See <a href="https://github.com/fabioricali/flak/blob/master/api.md">here</a>
 
 #### Local
 ```html
-<script src="node_modules/flak/dist/katch.min.js"></script>
+<script src="node_modules/flak/dist/flak.min.js"></script>
 ```
 
 #### CDN unpkg
 ```html
-<script src="https://unpkg.com/flak/dist/katch.min.js"></script>
+<script src="https://unpkg.com/flak/dist/flak.min.js"></script>
 ```
 
 #### CDN jsDeliver

@@ -1,4 +1,4 @@
-// [AIV]  Flak Build version: 0.2.0  
+// [AIV]  Flak Build version: 0.2.1  
  var flak =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -89,7 +89,7 @@ var helper = __webpack_require__(2);
 var error = __webpack_require__(3);
 
 var Flak = function () {
-
+    //TODO add support to cross-domain through postMessage, see: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
     /**
      * Constructor
      * @param [opts] {Object} options

@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.1] - 2017-08-15
+- Fixed wrong link in readme
+
 ## [0.2.0] - 2017-08-11
 - Added `onCatchAll`, now is possible catch all events
 - Fixed bad arguments in `fireAsync`

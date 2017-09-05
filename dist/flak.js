@@ -1,4 +1,4 @@
-// [AIV]  Flak Build version: 0.2.1  
+// [AIV]  Flak Build version: 0.3.0  
  var flak =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -174,17 +174,13 @@ var Flak = function () {
     }, {
         key: '_callEvent',
         value: function _callEvent(eventName, eventListener, args) {
-            if (eventListener.opts.maxCalls) {
-                if (eventListener.info.calls++ >= eventListener.opts.maxCalls) {
-                    this.off(eventName, eventListener);
-                    return;
-                }
-                eventListener.apply(this, args);
-                this._catchAll.call(this, args);
-            } else {
-                eventListener.apply(this, args);
-                this._catchAll.call(this, args);
+            if (eventListener.opts.maxCalls && eventListener.info.calls++ >= eventListener.opts.maxCalls) {
+                this.off(eventName, eventListener);
+                return;
             }
+
+            this._catchAll.call(this, args);
+            return eventListener.apply(this, args);
         }
 
         /**
@@ -302,6 +298,29 @@ var Flak = function () {
         }
 
         /**
+         * Calls the first of the listeners registered for the event and return it
+         * @param eventName {string} event name
+         * @param [args] {*} ...arguments
+         * @returns {*}
+         * @since 0.3.0
+         * @example
+         * emitter.on('myEvent', (param1, param2)=>{
+         *      return param1 + '-' + param2;
+         * });
+         * console.log('foo-bar' === emitter.fireTheFirst('myEvent', 'foo', 'bar')) //=> true;
+         */
+
+    }, {
+        key: 'fireTheFirst',
+        value: function fireTheFirst(eventName) {
+            for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+                args[_key2 - 1] = arguments[_key2];
+            }
+
+            if (this.exists(eventName)) return this._callEvent(eventName, this.events[eventName][0], args);
+        }
+
+        /**
          * Calls each of the listeners registered for the event, this method is async
          * @param eventName {string} event name
          * @param args {*} ...arguments
@@ -314,8 +333,8 @@ var Flak = function () {
         value: function fireAsync(eventName) {
             var _this = this;
 
-            for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-                args[_key2 - 1] = arguments[_key2];
+            for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+                args[_key3 - 1] = arguments[_key3];
             }
 
             args.unshift(eventName);
@@ -490,6 +509,7 @@ var Flak = function () {
          * Triggered when an event is fired
          * @param callback {Function} callback function
          * @returns {Flak}
+         * @since 0.2.0
          * @example
          * emitter.onCatchAll(args=>{
          *      // args is an array of params

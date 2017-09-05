@@ -8,6 +8,7 @@
     * [.on(eventName, listener, [opts])](#Flak+on) ⇒ [<code>Flak</code>](#Flak)
     * [.once(eventName, listener)](#Flak+once) ⇒ [<code>Flak</code>](#Flak)
     * [.fire(eventName, [...args])](#Flak+fire) ⇒ [<code>Flak</code>](#Flak)
+    * [.fireTheFirst(eventName, [...args])](#Flak+fireTheFirst) ⇒ <code>\*</code>
     * [.fireAsync(eventName, ...args)](#Flak+fireAsync)
     * [.off(eventName, [listener])](#Flak+off) ⇒ [<code>Flak</code>](#Flak)
     * [.prependListener(eventName, listener)](#Flak+prependListener) ⇒ [<code>Flak</code>](#Flak)
@@ -137,6 +138,33 @@ Calls each of the listeners registered for the event
 **Example**  
 ```js
 emitter.fire('myEvent', param1, param2, ...);
+```
+<a name="Flak+fireTheFirst"></a>
+
+### flak.fireTheFirst(eventName, [...args]) ⇒ <code>\*</code>
+Calls the first of the listeners registered for the event and return it
+
+**Kind**: instance method of [<code>Flak</code>](#Flak)  
+**Since**: 0.3.0  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>eventName</td><td><code>string</code></td><td><p>event name</p>
+</td>
+    </tr><tr>
+    <td>[...args]</td><td><code>*</code></td><td><p>...arguments</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+**Example**  
+```js
+emitter.on('myEvent', (param1, param2)=>{     return param1 + '-' + param2;});console.log('foo-bar' === emitter.fireTheFirst('myEvent', 'foo', 'bar')) //=> true;
 ```
 <a name="Flak+fireAsync"></a>
 
@@ -342,6 +370,7 @@ Set max number of listeners per event
 Triggered when an event is fired
 
 **Kind**: instance method of [<code>Flak</code>](#Flak)  
+**Since**: 0.2.0  
 <table>
   <thead>
     <tr>

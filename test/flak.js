@@ -12,7 +12,7 @@ describe('Flak', function () {
             console.log('on create', obj);
         });
 
-        event.on('myEvent', ()=>{
+        event.on('myEvent', () => {
             //.log();
             done();
         });
@@ -25,7 +25,7 @@ describe('Flak', function () {
 
         const event = new flak();
 
-        event.on('myEvent', (param)=>{
+        event.on('myEvent', (param) => {
             be.err.truthy(param);
             be.err.equal(123, param.a);
         });
@@ -47,12 +47,12 @@ describe('Flak', function () {
 
         const event = new flak();
 
-        function listener1(param){
+        function listener1(param) {
             console.log('listener1', param);
             done();
         }
 
-        function listener2(param){
+        function listener2(param) {
             console.log('listener2', param);
         }
 
@@ -66,26 +66,26 @@ describe('Flak', function () {
 
         const event = new flak();
 
-        function listener1(param, other){
+        function listener1(param, other) {
             console.log('listener1', param, other);
             done();
         }
 
-        function listener2(param, other){
+        function listener2(param, other) {
             console.log('listener2', param, other);
         }
 
-        function listener3(param, other){
+        function listener3(param, other) {
             console.log('listener3', param, other);
         }
 
-        function listener4(param, other){
+        function listener4(param, other) {
             console.log('listener4', param, other);
         }
 
         event.on('myEvent1', [listener1, listener2]);
         event.on('myEvent2', [listener2, listener3]);
-        event.on('catchAll', (param, other)=>{
+        event.on('catchAll', (param, other) => {
             console.log('catchAll', param, other);
         });
 
@@ -123,12 +123,16 @@ describe('Flak', function () {
 
         const event = new flak();
 
-        const listener1 = ()=>{return true};
-        const listener2 = ()=>{return true};
+        const listener1 = () => {
+            return true
+        };
+        const listener2 = () => {
+            return true
+        };
 
         const _array = [listener1];
 
-        _array[0].o = {a:1};
+        _array[0].o = {a: 1};
 
         console.log(_array[0].o);
 
@@ -136,11 +140,11 @@ describe('Flak', function () {
         console.log(listener1 === _array[0]);
         console.log(listener2 === _array[0]);
 
-        event.on('myEvent', (param)=>{
+        event.on('myEvent', (param) => {
             console.log(param, 'hello');
         });
 
-        event.on('myEvent', (param, param2)=>{
+        event.on('myEvent', (param, param2) => {
             console.log(param, param2);
             done();
         });
@@ -149,10 +153,10 @@ describe('Flak', function () {
         console.log(event.getEvents());
     });
 
-    it('remove one event listener', ()=>{
+    it('remove one event listener', () => {
         const event = new flak();
 
-        event.on('myEvent', (param)=>{
+        event.on('myEvent', (param) => {
             console.log(param, 'hello');
         });
 
@@ -163,18 +167,18 @@ describe('Flak', function () {
         be.err.falsy(event.getEvents()['myEvent']);
     });
 
-    it('remove event listener same name', ()=>{
+    it('remove event listener same name', () => {
         const event = new flak();
 
-        event.on('myEvent', (param)=>{
+        event.on('myEvent', (param) => {
             console.log(param, 'hello');
         });
 
-        event.on('myEvent1', (param)=>{
+        event.on('myEvent1', (param) => {
             console.log(param, 'world');
         });
 
-        event.on('myEvent', (param)=>{
+        event.on('myEvent', (param) => {
             console.log(param, 'world');
         });
 
@@ -185,20 +189,20 @@ describe('Flak', function () {
         be.err.falsy(event.getEvents()['myEvent']);
     });
 
-    it('remove event listener by listener', ()=>{
+    it('remove event listener by listener', () => {
         const event = new flak();
         let listener1;
         let listener2;
         let listener3;
-        event.on('myEvent', listener1 = (param)=>{
+        event.on('myEvent', listener1 = (param) => {
             console.log(param, 'hello');
         });
 
-        event.on('myEvent1', listener2 = (param)=>{
+        event.on('myEvent1', listener2 = (param) => {
             console.log(param, 'world');
         });
 
-        event.on('myEvent', listener3 = (param)=>{
+        event.on('myEvent', listener3 = (param) => {
             console.log(param, 'world');
         });
 
@@ -210,13 +214,13 @@ describe('Flak', function () {
         be.err.equal(1, event.getEvents()['myEvent'].length);
     });
 
-    it('once', (done)=> {
+    it('once', (done) => {
         const event = new flak();
-        event.once('myEvent', (param)=>{
+        event.once('myEvent', (param) => {
             console.log(param, 'hello');
             done();
         });
-        event.on('myEvent', (param)=>{
+        event.on('myEvent', (param) => {
             console.log(param, 'hello');
         });
         console.log(event.getEvents());
@@ -225,13 +229,13 @@ describe('Flak', function () {
         console.log('total', event.getEvents());
     });
 
-    it('once, fireAsync', (done)=> {
+    it('once, fireAsync', (done) => {
         const event = new flak();
-        event.once('myEvent', (param)=>{
+        event.once('myEvent', (param) => {
             console.log(param, 'hello');
             done();
         });
-        event.on('myEvent', (param)=>{
+        event.on('myEvent', (param) => {
             console.log(param, 'hello');
         });
         console.log(event.getEvents());
@@ -240,10 +244,10 @@ describe('Flak', function () {
         console.log('total', event.getEvents());
     });
 
-    it('on max calls setting', (done)=> {
+    it('on max calls setting', (done) => {
         const event = new flak();
         let calls = 0;
-        event.on('myEvent', (param)=>{
+        event.on('myEvent', (param) => {
             console.log(param, 'hello');
             calls++;
         }, {
@@ -255,11 +259,11 @@ describe('Flak', function () {
         event.fire('myEvent', {a: 123}, 'wowo');
         event.fire('myEvent', {a: 123}, 'wowo');
         event.fire('myEvent', {a: 123}, 'wowo');
-        if(calls === 4)
+        if (calls === 4)
             done();
     });
 
-    it('maxListeners', (done)=> {
+    it('maxListeners', (done) => {
 
         const event = new flak({
             maxListeners: 4
@@ -297,7 +301,7 @@ describe('Flak', function () {
         }
     });
 
-    it('setMaxListeners', (done)=> {
+    it('setMaxListeners', (done) => {
 
         const event = new flak({
             maxListeners: 4
@@ -335,7 +339,7 @@ describe('Flak', function () {
         }
     });
 
-    it('setMaxListeners, wrong value', ()=> {
+    it('setMaxListeners, wrong value', () => {
 
         const event = new flak();
 
@@ -346,7 +350,7 @@ describe('Flak', function () {
         }
     });
 
-    it('getMaxListeners', ()=> {
+    it('getMaxListeners', () => {
         const event = new flak({
             maxListeners: 4
         });
@@ -354,7 +358,7 @@ describe('Flak', function () {
         be.err.equal(4, event.getMaxListeners());
     });
 
-    it('clear', ()=> {
+    it('clear', () => {
         const event = new flak();
 
         event.on('myEvent', (param) => {
@@ -372,7 +376,7 @@ describe('Flak', function () {
         be.err.false(event.exists('myEvent'));
     });
 
-    it('getListenersCount equal 3', ()=> {
+    it('getListenersCount equal 3', () => {
         const event = new flak();
 
         event.on('myEventPlus', (param) => {
@@ -393,7 +397,7 @@ describe('Flak', function () {
         be.err.equal(1, event.getListenersCount('myEventPlus'));
     });
 
-    it('prependListener', ()=> {
+    it('prependListener', () => {
         const event = new flak();
 
         event.on('myEventPlus', (param) => {
@@ -407,7 +411,7 @@ describe('Flak', function () {
         be.err.truthy(event.getEvents()['myEvent']);
     });
 
-    it('prependListener fail', (done)=> {
+    it('prependListener fail', (done) => {
         const event = new flak();
 
         try {
@@ -418,7 +422,7 @@ describe('Flak', function () {
         }
     });
 
-    it('prependOnceListener', ()=> {
+    it('prependOnceListener', () => {
         const event = new flak();
 
         event.on('myEventPlus', (param) => {
@@ -438,7 +442,7 @@ describe('Flak', function () {
         be.err.equal(0, event.getEvents()['myEvent'].length);
     });
 
-    it('prependOnceListener fireAsync', (done)=> {
+    it('prependOnceListener fireAsync', (done) => {
         const event = new flak({
             asyncDelay: 100
         });
@@ -458,14 +462,14 @@ describe('Flak', function () {
         event.fireAsync('myEvent', 'a2');
         //be.err.not.equal('myEvent', event.getEvents()[0]);
         console.log(event.getEvents());
-        setTimeout(()=>{
+        setTimeout(() => {
             be.err.equal(0, event.getEvents()['myEvent'].length);
             done();
         }, event.opts.asyncDelay * 2);
 
     });
 
-    it('prependOnceListener fail', (done)=> {
+    it('prependOnceListener fail', (done) => {
         const event = new flak();
 
         try {
@@ -476,7 +480,7 @@ describe('Flak', function () {
         }
     });
 
-    it('on and once same name', (done)=> {
+    it('on and once same name', (done) => {
         const event = new flak();
 
         event.once('myEvent', (param) => {
@@ -496,7 +500,7 @@ describe('Flak', function () {
         console.log(event.getListeners('myEvent'));
     });
 
-    it('once and on same name, produce multiple calls', (done)=> {
+    it('once and on same name, produce multiple calls', (done) => {
         const event = new flak();
 
         event.on('myEvent', (param) => {
@@ -505,7 +509,7 @@ describe('Flak', function () {
 
         event.once('myEvent', (param) => {
             console.log(param, 'hello2');
-            setTimeout(()=>{
+            setTimeout(() => {
                 console.log(event.getListeners('myEvent'));
                 be.err.equal(1, event.getListeners('myEvent').length);
                 done();
@@ -519,16 +523,16 @@ describe('Flak', function () {
 
     });
 
-    it('once and on same name, produce multiple calls, fireAsync', (done)=> {
+    it('once and on same name, produce multiple calls, fireAsync', (done) => {
         const event = new flak({
             asyncDelay: 100
         });
 
-        event.onCreated((eventName)=>{
+        event.onCreated((eventName) => {
             console.log('event create', eventName);
         });
 
-        event.onRemoved((eventName, listener)=>{
+        event.onRemoved((eventName, listener) => {
             console.log('event remove', eventName, listener);
         });
 
@@ -553,14 +557,15 @@ describe('Flak', function () {
 
     });
 
-    it('catch all', (done)=>{
+    it('catch all', (done) => {
         const event = new flak();
 
-        let i=0;
+        let i = 0;
 
         event.onCatchAll((args) => {
+            console.log(i);
             console.log('catch all', args);
-            if(i === 3)
+            if (i === 2)
                 done();
         });
 
@@ -583,7 +588,7 @@ describe('Flak', function () {
 
     });
 
-    it('on, wrong event name', ()=>{
+    it('on, wrong event name', () => {
         const event = new flak();
         try {
             event.on('', (param) => {
@@ -593,7 +598,7 @@ describe('Flak', function () {
         }
     });
 
-    it('on, wrong listener item in array', ()=>{
+    it('on, wrong listener item in array', () => {
         const event = new flak();
         try {
             event.on('event', [(param) => {
@@ -603,43 +608,58 @@ describe('Flak', function () {
         }
     });
 
-    it('off, wrong event name', ()=>{
+    it('off, wrong event name', () => {
         const event = new flak();
         try {
-            event.on('event', [(param) => {}]);
-            event.off(12, [(param) => {}]);
+            event.on('event', [(param) => {
+            }]);
+            event.off(12, [(param) => {
+            }]);
         } catch (e) {
             be.err.equal(flak._error[0], e.message);
         }
     });
 
-    it('exists, wrong event name', ()=>{
+    it('exists, wrong event name', () => {
         const event = new flak();
         try {
-            event.on('event', [(param) => {}]);
+            event.on('event', [(param) => {
+            }]);
             event.exists();
         } catch (e) {
             be.err.equal(flak._error[0], e.message);
         }
     });
 
-    it('getListeners, wrong event name', ()=>{
+    it('getListeners, wrong event name', () => {
         const event = new flak();
         try {
-            event.on('event', [(param) => {}]);
+            event.on('event', [(param) => {
+            }]);
             event.getListeners();
         } catch (e) {
             be.err.equal(flak._error[0], e.message);
         }
     });
 
-    it('getListeners, event not found', ()=>{
+    it('getListeners, event not found', () => {
         const event = new flak();
         try {
-            event.on('event', [(param) => {}]);
+            event.on('event', [(param) => {
+            }]);
             event.getListeners('hi');
         } catch (e) {
             be.err.equal(flak._error[5], e.message);
         }
+    });
+
+    it('fireTheFirst', () => {
+        const event = new flak();
+
+        event.on('event', () => {
+            return 'hello';
+        });
+        be.err.equal('hello', event.fireTheFirst('event'));
+
     });
 });

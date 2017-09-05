@@ -59,6 +59,12 @@ emitter.fireAsync('myEvent2', true, {a: 1});
 
 // Remove all listeners for myEvent1
 emitter.off('myEvent1');
+
+// Returning data using "fireTheFirst"
+emitter.on('myEvent', (param1, param2)=>{
+    return param1 + '-' + param2;
+});
+console.log('foo-bar' === emitter.fireTheFirst('myEvent', 'foo', 'bar')) //=> true;
 ```
 
 ### API Documentation

@@ -1,6 +1,6 @@
 {
     "name": "flak",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "JavaScript event emitter for browser and server",
     "main": "dist/flak.js",
     "scripts": {

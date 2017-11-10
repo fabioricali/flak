@@ -1,11 +1,11 @@
 if (typeof process === 'object') {
     global.flak = require('../src/flak');
+    //global.flak = require('../dist/flak');
     global.be = require('bejs');
 }
 
 describe('Flak', function () {
     it('on, single listener', (done) => {
-
         const event = new flak();
 
         event.onCreated((obj) => {

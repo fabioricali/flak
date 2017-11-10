@@ -16,7 +16,8 @@ module.exports = {
     output: {
         filename: './dist/flak.min.js',
         library: 'flak',
-        umdNamedDefine: true
+        umdNamedDefine: true,
+        libraryTarget: 'umd'
     },
     resolve: {
         modules: ['node_modules'],

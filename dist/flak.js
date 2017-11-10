@@ -1,6 +1,15 @@
 // [AIV]  Flak Build version: 0.3.0  
- var flak =
-/******/ (function(modules) { // webpackBootstrap
+ (function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("flak", [], factory);
+	else if(typeof exports === 'object')
+		exports["flak"] = factory();
+	else
+		root["flak"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -630,4 +639,5 @@ module.exports = helper;
 module.exports = ['event name is required and must be a string', 'listener is required and must be a function or an array of function', 'value must be a number', 'increase maxListeners per event: ', 'event name not valid', 'event not found'];
 
 /***/ })
-/******/ ]); 
+/******/ ]);
+}); 

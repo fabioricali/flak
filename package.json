@@ -2,7 +2,7 @@
     "name": "flak",
     "version": "0.3.0",
     "description": "JavaScript event emitter for browser and server",
-    "main": "index.js",
+    "main": "dist/flak.js",
     "scripts": {
         "version:major": "webpack --env.major && npm run-script doc && version-to-tag.sh && npm publish",
         "version:minor": "webpack --env.minor && npm run-script doc && version-to-tag.sh && npm publish",

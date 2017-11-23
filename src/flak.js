@@ -62,7 +62,8 @@ class Flak {
 
         listener.opts = helper.defaults(opts, this.defaultListenerOpts);
 
-        listener.info = {
+        listener.state = {
+            suspended: false,
             calls: 0
         };
 
@@ -83,7 +84,7 @@ class Flak {
      * @ignore
      */
     _callEvent(eventName, eventListener, args) {
-        if (eventListener.opts.maxCalls && eventListener.info.calls++ >= eventListener.opts.maxCalls) {
+        if (eventListener.opts.maxCalls && eventListener.state.calls++ >= eventListener.opts.maxCalls) {
             this.off(eventName, eventListener);
             return;
         }
@@ -274,6 +275,22 @@ class Flak {
         });
     }
 
+    suspendEvent(...eventName) {
+        
+    }
+
+    resumeEvent(...eventName) {
+        
+    }
+
+    suspendEvents() {
+        
+    }
+
+    resumeEvents() {
+        
+    }
+    
     /**
      * Remove all events
      * @returns {Flak}

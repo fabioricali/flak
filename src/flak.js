@@ -333,7 +333,17 @@ class Flak {
     resumeEvents() {
         return this._suspendEvent(Object.keys(this.events), false);
     }
-    
+
+    /**
+     * Check if an event is suspended
+     * @param eventName {string}
+     * @returns {*}
+     */
+    isSupended(eventName) {
+        if(!this.exists(eventName)) return false;
+        return this.events[eventName][0].state.suspended;
+    }
+
     /**
      * Remove all events
      * @returns {Flak}

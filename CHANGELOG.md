@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added 
     - `suspendEvent`
     - `resumeEvent`
+    - `suspendEvents`
+    - `resumeEvents`
 
 ## [0.3.1] - 2017-11-10
 - Now Flak is UMD ready

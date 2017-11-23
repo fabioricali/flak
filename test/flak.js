@@ -709,7 +709,26 @@ describe('Flak', function () {
 
     });
 
-    it('resumeEvent, false', (done) => {
+    it('suspendEvent, multiple', (done) => {
+        const emitter = new flak();
+
+        emitter.on('event1', () => {
+            throw new Error('error 1');
+        });
+        emitter.on('event2', () => {
+            throw new Error('error 2');
+        });
+
+        emitter.suspendEvent('event1', 'event2');
+        emitter.fire('event1');
+        emitter.fire('event2');
+        setTimeout(()=>{
+            done();
+        }, 500);
+
+    });
+
+    it('resumeEvent', (done) => {
         const emitter = new flak();
 
         emitter.on('event', () => {
@@ -721,6 +740,26 @@ describe('Flak', function () {
         setTimeout(()=>{
             emitter.resumeEvent('event');
             emitter.fire('event');
+        }, 500);
+
+    });
+
+    it('resumeEvent, multiple', (done) => {
+        const emitter = new flak();
+
+        emitter.on('event1', () => {
+
+        });
+        emitter.on('event2', () => {
+            done();
+        });
+
+        emitter.suspendEvent('event1', 'event2');
+
+        setTimeout(()=>{
+            emitter.resumeEvent('event1', 'event2');
+            emitter.fire('event1');
+            emitter.fire('event2');
         }, 500);
 
     });

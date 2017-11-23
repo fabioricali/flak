@@ -226,6 +226,7 @@ class Flak {
      * console.log('foo-bar' === emitter.fireTheFirst('myEvent', 'foo', 'bar')) //=> true;
      */
     fireTheFirst(eventName, ...args) {
+        /* istanbul ignore else  */
         if(this.exists(eventName))
             return this._callEvent(eventName, this.events[eventName][0], args);
     }
@@ -257,6 +258,7 @@ class Flak {
         if (!helper.is(eventName, 'string'))
             throw new Error(error[0]);
 
+        /* istanbul ignore else  */
         if (this.events[eventName])
             if (typeof listener === 'function') {
                 for (let i = 0; i < this.events[eventName].length; i++) {
@@ -340,6 +342,7 @@ class Flak {
      * @returns {boolean}
      */
     isSuspended(eventName) {
+        /* istanbul ignore else  */
         if(!this.exists(eventName)) return false;
         return this.events[eventName][0].state.suspended;
     }

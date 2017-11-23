@@ -802,4 +802,25 @@ describe('Flak', function () {
         }, 500);
 
     });
+
+    it('isSuspended true', () => {
+        const emitter = new flak();
+
+        emitter.on('event', () => {
+            throw new Error('error');
+        });
+
+        emitter.suspendEvent('event');
+        be.err.true(emitter.isSuspended('event'));
+    });
+
+    it('isSuspended false', () => {
+        const emitter = new flak();
+
+        emitter.on('event', () => {
+            throw new Error('error');
+        });
+
+        be.err.false(emitter.isSuspended('event'));
+    });
 });

@@ -337,9 +337,9 @@ class Flak {
     /**
      * Check if an event is suspended
      * @param eventName {string}
-     * @returns {*}
+     * @returns {boolean}
      */
-    isSupended(eventName) {
+    isSuspended(eventName) {
         if(!this.exists(eventName)) return false;
         return this.events[eventName][0].state.suspended;
     }

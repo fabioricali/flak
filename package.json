@@ -1,7 +1,7 @@
 {
     "name": "flak",
     "version": "0.3.1",
-    "description": "JavaScript event emitter for browser and server",
+    "description": "Powerfull universal JavaScript event emitter for browser and server.",
     "main": "dist/flak.js",
     "scripts": {
         "version:major": "webpack --env.major && npm run-script doc && version-to-tag.sh && npm publish",
@@ -22,7 +22,9 @@
         "once",
         "addEvent",
         "removeEvent",
-        "addListener"
+        "addListener",
+        "suspendEvent",
+        "resumeEvent"
     ],
     "author": "Fabio Ricali",
     "license": "MIT",

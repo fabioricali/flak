@@ -13,6 +13,11 @@
     * [.off(eventName, [listener])](#Flak+off) ⇒ [<code>Flak</code>](#Flak)
     * [.prependListener(eventName, listener)](#Flak+prependListener) ⇒ [<code>Flak</code>](#Flak)
     * [.prependOnceListener(eventName, listener)](#Flak+prependOnceListener) ⇒ [<code>Flak</code>](#Flak)
+    * [.suspendEvent(...eventName)](#Flak+suspendEvent) ⇒ [<code>Flak</code>](#Flak)
+    * [.resumeEvent(...eventName)](#Flak+resumeEvent) ⇒ [<code>Flak</code>](#Flak)
+    * [.suspendEvents()](#Flak+suspendEvents) ⇒ [<code>Flak</code>](#Flak)
+    * [.resumeEvents()](#Flak+resumeEvents) ⇒ [<code>Flak</code>](#Flak)
+    * [.isSuspended(eventName)](#Flak+isSuspended) ⇒ <code>boolean</code>
     * [.clear()](#Flak+clear) ⇒ [<code>Flak</code>](#Flak)
     * [.getListenersCount(eventName)](#Flak+getListenersCount) ⇒ <code>number</code>
     * [.getListeners(eventName)](#Flak+getListeners) ⇒ <code>Array</code>
@@ -259,6 +264,74 @@ Adds a one time listener function to the beginning of the listeners array for th
     </tr><tr>
     <td>listener</td><td><code>function</code> | <code>Array.&lt;function()&gt;</code></td><td><p>listener function</p>
 </td>
+    </tr>  </tbody>
+</table>
+
+<a name="Flak+suspendEvent"></a>
+
+### flak.suspendEvent(...eventName) ⇒ [<code>Flak</code>](#Flak)
+Suspends firing of the named event(s).
+
+**Kind**: instance method of [<code>Flak</code>](#Flak)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>...eventName</td><td><code>string</code></td><td><p>multiple event names to suspend</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+<a name="Flak+resumeEvent"></a>
+
+### flak.resumeEvent(...eventName) ⇒ [<code>Flak</code>](#Flak)
+Resumes firing of the named event(s).
+
+**Kind**: instance method of [<code>Flak</code>](#Flak)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>...eventName</td><td><code>string</code></td><td><p>multiple event names to resume.</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+<a name="Flak+suspendEvents"></a>
+
+### flak.suspendEvents() ⇒ [<code>Flak</code>](#Flak)
+Suspends all events.
+
+**Kind**: instance method of [<code>Flak</code>](#Flak)  
+<a name="Flak+resumeEvents"></a>
+
+### flak.resumeEvents() ⇒ [<code>Flak</code>](#Flak)
+Resume all events.
+
+**Kind**: instance method of [<code>Flak</code>](#Flak)  
+<a name="Flak+isSuspended"></a>
+
+### flak.isSuspended(eventName) ⇒ <code>boolean</code>
+Check if an event is suspended
+
+**Kind**: instance method of [<code>Flak</code>](#Flak)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>eventName</td><td><code>string</code></td>
     </tr>  </tbody>
 </table>
 

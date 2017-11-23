@@ -302,7 +302,7 @@ class Flak {
 
     /**
      * Suspends firing of the named event(s).
-     * @param eventName {string...} multiple event names to suspend
+     * @param eventName {...string} multiple event names to suspend
      * @returns {Flak}
      */
     suspendEvent(...eventName) {
@@ -311,7 +311,7 @@ class Flak {
 
     /**
      * Resumes firing of the named event(s).
-     * @param eventName {string...} multiple event names to resume.
+     * @param eventName {...string} multiple event names to resume.
      * @returns {Flak}
      */
     resumeEvent(...eventName) {

@@ -1,4 +1,4 @@
-// [AIV]  Flak Build version: 0.3.1  
+// [AIV]  Flak Build version: 1.0.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -162,7 +162,8 @@ var Flak = function () {
 
             listener.opts = helper.defaults(opts, this.defaultListenerOpts);
 
-            listener.info = {
+            listener.state = {
+                suspended: false,
                 calls: 0
             };
 
@@ -183,13 +184,44 @@ var Flak = function () {
     }, {
         key: '_callEvent',
         value: function _callEvent(eventName, eventListener, args) {
-            if (eventListener.opts.maxCalls && eventListener.info.calls++ >= eventListener.opts.maxCalls) {
+            if (eventListener.state.suspended) return;
+
+            if (eventListener.opts.maxCalls && eventListener.state.calls++ >= eventListener.opts.maxCalls) {
                 this.off(eventName, eventListener);
                 return;
             }
 
             this._catchAll.call(this, args);
             return eventListener.apply(this, args);
+        }
+
+        /**
+         *
+         * @param events {Array} event list
+         * @param suspended {boolean}
+         * @returns {Flak}
+         * @private
+         * @ignore
+         */
+
+    }, {
+        key: '_suspendEvent',
+        value: function _suspendEvent() {
+            var events = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+            var suspended = arguments[1];
+
+            var eventName = void 0;
+
+            for (var event in events) {
+                eventName = events[event];
+                if (this.events[eventName]) {
+                    this.events[eventName].forEach(function (e) {
+                        e.state.suspended = suspended;
+                    });
+                }
+            }
+
+            return this;
         }
 
         /**
@@ -326,6 +358,7 @@ var Flak = function () {
                 args[_key2 - 1] = arguments[_key2];
             }
 
+            /* istanbul ignore else  */
             if (this.exists(eventName)) return this._callEvent(eventName, this.events[eventName][0], args);
         }
 
@@ -367,6 +400,7 @@ var Flak = function () {
         value: function off(eventName, listener) {
             if (!helper.is(eventName, 'string')) throw new Error(error[0]);
 
+            /* istanbul ignore else  */
             if (this.events[eventName]) if (typeof listener === 'function') {
                 for (var i = 0; i < this.events[eventName].length; i++) {
                     if (this.events[eventName][i] === listener) {
@@ -413,6 +447,74 @@ var Flak = function () {
                 maxCalls: 1,
                 prepend: true
             });
+        }
+
+        /**
+         * Suspends firing of the named event(s).
+         * @param eventName {...string} multiple event names to suspend
+         * @returns {Flak}
+         */
+
+    }, {
+        key: 'suspendEvent',
+        value: function suspendEvent() {
+            for (var _len4 = arguments.length, eventName = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+                eventName[_key4] = arguments[_key4];
+            }
+
+            return this._suspendEvent(eventName, true);
+        }
+
+        /**
+         * Resumes firing of the named event(s).
+         * @param eventName {...string} multiple event names to resume.
+         * @returns {Flak}
+         */
+
+    }, {
+        key: 'resumeEvent',
+        value: function resumeEvent() {
+            for (var _len5 = arguments.length, eventName = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+                eventName[_key5] = arguments[_key5];
+            }
+
+            return this._suspendEvent(eventName, false);
+        }
+
+        /**
+         * Suspends all events.
+         * @returns {Flak}
+         */
+
+    }, {
+        key: 'suspendEvents',
+        value: function suspendEvents() {
+            return this._suspendEvent(Object.keys(this.events), true);
+        }
+
+        /**
+         * Resume all events.
+         * @returns {Flak}
+         */
+
+    }, {
+        key: 'resumeEvents',
+        value: function resumeEvents() {
+            return this._suspendEvent(Object.keys(this.events), false);
+        }
+
+        /**
+         * Check if an event is suspended
+         * @param eventName {string}
+         * @returns {boolean}
+         */
+
+    }, {
+        key: 'isSuspended',
+        value: function isSuspended(eventName) {
+            /* istanbul ignore else  */
+            if (!this.exists(eventName)) return false;
+            return this.events[eventName][0].state.suspended;
         }
 
         /**

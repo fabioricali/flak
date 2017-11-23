@@ -2,7 +2,7 @@
 <br/><br/>
 <img width="250" src="https://raw.githubusercontent.com/fabioricali/flak/master/extra/logo.png" title="flak"/>
 <br/><br/>
-JavaScript event emitter for browser and server.
+Powerfull universal JavaScript event emitter for browser and server.
 <br/><br/>
 <a href="https://travis-ci.org/fabioricali/flak" target="_blank"><img src="https://travis-ci.org/fabioricali/flak.svg?branch=master" title="Build Status"/></a>
 <a href="https://coveralls.io/github/fabioricali/flak?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/fabioricali/flak/badge.svg?branch=master&1" title="Coverage Status"/></a>
@@ -65,10 +65,17 @@ emitter.on('myEvent', (param1, param2)=>{
     return param1 + '-' + param2;
 });
 console.log('foo-bar' === emitter.fireTheFirst('myEvent', 'foo', 'bar')) //=> true;
+
+// Suspend event
+emitter.suspendEvent('myEvent');
+emitter.fire('myEvent'); // will not be fired!
+
+// Resume event
+emitter.resumeEvent('myEvent');
 ```
 
 ### API Documentation
-See <a href="https://github.com/fabioricali/flak/blob/master/api.md">here</a>
+See <a href="https://github.com/fabioricali/flak/blob/master/api.md">full documentation here</a>
 
 ### Browser
 

@@ -763,4 +763,43 @@ describe('Flak', function () {
         }, 500);
 
     });
+
+    it('suspendEvents', (done) => {
+        const emitter = new flak();
+
+        emitter.on('event1', () => {
+            throw new Error('error 1');
+        });
+        emitter.on('event2', () => {
+            throw new Error('error 2');
+        });
+
+        emitter.suspendEvents();
+        emitter.fire('event1');
+        emitter.fire('event2');
+        setTimeout(()=>{
+            done();
+        }, 500);
+
+    });
+
+    it('resumeEvents', (done) => {
+        const emitter = new flak();
+
+        emitter.on('event1', () => {
+
+        });
+        emitter.on('event2', () => {
+            done();
+        });
+
+        emitter.suspendEvents();
+
+        setTimeout(()=>{
+            emitter.resumeEvents();
+            emitter.fire('event1');
+            emitter.fire('event2');
+        }, 500);
+
+    });
 });

@@ -318,12 +318,20 @@ class Flak {
         return this._suspendEvent(eventName, false);
     }
 
+    /**
+     * Suspends all events.
+     * @returns {Flak}
+     */
     suspendEvents() {
-        return this;
+        return this._suspendEvent(Object.keys(this.events), true);
     }
 
+    /**
+     * Resume all events.
+     * @returns {Flak}
+     */
     resumeEvents() {
-        return this;
+        return this._suspendEvent(Object.keys(this.events), false);
     }
     
     /**

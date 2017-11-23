@@ -84,6 +84,8 @@ class Flak {
      * @ignore
      */
     _callEvent(eventName, eventListener, args) {
+        if (eventListener.state.suspended) return;
+
         if (eventListener.opts.maxCalls && eventListener.state.calls++ >= eventListener.opts.maxCalls) {
             this.off(eventName, eventListener);
             return;
@@ -91,6 +93,29 @@ class Flak {
 
         this._catchAll.call(this, args);
         return eventListener.apply(this, args);
+    }
+
+    /**
+     *
+     * @param events {Array} event list
+     * @param suspended {boolean}
+     * @returns {Flak}
+     * @private
+     * @ignore
+     */
+    _suspendEvent(events = [], suspended) {
+        let eventName;
+
+        for(let event in events) {
+            eventName = events[event];
+            if(this.events[eventName]) {
+                this.events[eventName].forEach((e) => {
+                    e.state.suspended = suspended;
+                });
+            }
+        }
+
+        return this;
     }
 
     /**
@@ -275,20 +300,30 @@ class Flak {
         });
     }
 
+    /**
+     * Suspends firing of the named event(s).
+     * @param eventName {string...} multiple event names to suspend
+     * @returns {Flak}
+     */
     suspendEvent(...eventName) {
-        
+        return this._suspendEvent(eventName, true);
     }
 
+    /**
+     * Resumes firing of the named event(s).
+     * @param eventName {string...} multiple event names to resume.
+     * @returns {Flak}
+     */
     resumeEvent(...eventName) {
-        
+        return this._suspendEvent(eventName, false);
     }
 
     suspendEvents() {
-        
+        return this;
     }
 
     resumeEvents() {
-        
+        return this;
     }
     
     /**
